@@ -510,7 +510,7 @@ public class VEventTest extends CalendarComponentTest {
      *
      * @throws ParseException
      */
-    public void testGetConsumedTimeWithExDate2() throws IOException, ParserException {
+    public void testGetConsumedTimeWithExDate2() throws IOException, ParserException, NotFoundException {
         InputStream in = getClass().getResourceAsStream("/samples/valid/friday13.ics");
         net.fortuna.ical4j.model.Calendar calendar = new CalendarBuilder().build(in);
 
@@ -571,7 +571,7 @@ public class VEventTest extends CalendarComponentTest {
      * @throws IOException
      * @throws ParserException
      */
-    public static TestSuite suite() throws ValidationException, ParseException, IOException, URISyntaxException, ParserException {
+    public static TestSuite suite() throws ValidationException, ParseException, IOException, URISyntaxException, ParserException, NotFoundException {
         UidGenerator uidGenerator = new UidGenerator("1");
 
         Calendar weekday9AM = getCalendarInstance();

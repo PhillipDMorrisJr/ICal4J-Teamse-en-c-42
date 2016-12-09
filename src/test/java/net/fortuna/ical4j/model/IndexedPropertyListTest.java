@@ -34,6 +34,7 @@ package net.fortuna.ical4j.model;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.parameter.CuType;
+import net.fortuna.ical4j.model.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,9 +66,10 @@ public class IndexedPropertyListTest extends TestCase {
     /**
      * Indexing with IndexedPropertyList.
      */
-    public void testIndexing() {
+    public void testIndexing() throws NotFoundException {
         // a VEvent for more interesting data.. 
         Component component = (Component) calendar.getComponents(Component.VEVENT).iterator().next();
+
         IndexedPropertyList list = new IndexedPropertyList(component.getProperties(), Parameter.CUTYPE);
 
         LOG.info(list.getProperties(CuType.INDIVIDUAL.getValue()).size() + " individual attendees.");

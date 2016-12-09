@@ -88,7 +88,7 @@ public class CategoriesTest extends PropertyTest {
      * Test escaping of commas in categories.
      */
     public void testCommaEscaping() throws ValidationException, IOException,
-            ParserException {
+            ParserException, NotFoundException {
         Categories cat1 = new Categories("test1");
         Categories cat2 = new Categories("test2");
         Categories cat3 = new Categories("test1,test2,test 1\\,2\\,3");
@@ -134,7 +134,7 @@ public class CategoriesTest extends PropertyTest {
      * @throws ParserException
      */
     public static TestSuite suite() throws IOException, ValidationException,
-            ParserException {
+            ParserException, NotFoundException {
         TestSuite suite = new TestSuite();
         String list = "one,two,three";
         Categories categories = new Categories(list);

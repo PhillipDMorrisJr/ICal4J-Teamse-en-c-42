@@ -84,7 +84,7 @@ public class AttachTest extends TestCase {
     /*
      * Class under test for void Attach(ParameterList, String)
      */
-    public void testAttachParameterListString() throws IOException, URISyntaxException, ValidationException, ParserException {
+    public void testAttachParameterListString() throws IOException, URISyntaxException, ValidationException, ParserException, NotFoundException {
 
         //log.info(attach);
 

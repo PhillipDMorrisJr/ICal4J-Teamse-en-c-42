@@ -183,6 +183,25 @@ public class VTimeZone extends CalendarComponent {
         return b;
     }
 
+	private boolean isStandardCOrDaylightC() {
+	
+		try {
+			getObservances().getComponent(Observance.STANDARD);
+			return true;
+		} catch (NotFoundException e) {
+		
+		}
+		
+		try {
+			getObservances().getComponent(Observance.DAYLIGHT);
+			return true;
+		} catch (NotFoundException e) {
+			
+		}
+		
+		return false;
+	}
+
     /**
      * {@inheritDoc}
      */
@@ -206,12 +225,15 @@ public class VTimeZone extends CalendarComponent {
         /*
          * ; one of 'standardc' or 'daylightc' MUST occur ..; and each MAY occur more than once. standardc / daylightc /
          */
-        if (getObservances().getComponent(Observance.STANDARD) == null
-                && getObservances().getComponent(Observance.DAYLIGHT) == null) {
+        if (this.isStandardCOrDaylightC()) {
             throw new ValidationException("Sub-components ["
                     + Observance.STANDARD + "," + Observance.DAYLIGHT
                     + "] must be specified at least once");
         }
+
+
+
+
 
         for (final Observance observance : getObservances()) {
             observance.validate(recurse);

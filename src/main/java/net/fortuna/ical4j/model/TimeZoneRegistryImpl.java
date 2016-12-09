@@ -235,7 +235,14 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
         if (resource != null) {
             final CalendarBuilder builder = new CalendarBuilder();
             final Calendar calendar = builder.build(resource.openStream());
-            final VTimeZone vTimeZone = (VTimeZone) calendar.getComponent(Component.VTIMEZONE);
+            VTimeZone vTimeZone;
+			try {
+				vTimeZone = (VTimeZone) calendar.getComponent(Component.VTIMEZONE);
+			} catch (NotFoundException e) {
+				vTimeZone = null;
+			}
+			
+
             // load any available updates for the timezone.. can be explicility disabled via configuration
             if (!"false".equals(Configurator.getProperty(UPDATE_ENABLED))) {
                 return updateDefinition(vTimeZone);
