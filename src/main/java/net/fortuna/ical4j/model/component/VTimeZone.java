@@ -225,7 +225,7 @@ public class VTimeZone extends CalendarComponent {
         /*
          * ; one of 'standardc' or 'daylightc' MUST occur ..; and each MAY occur more than once. standardc / daylightc /
          */
-        if (this.isStandardCOrDaylightC()) {
+        if (!this.isStandardCOrDaylightC()) {
             throw new ValidationException("Sub-components ["
                     + Observance.STANDARD + "," + Observance.DAYLIGHT
                     + "] must be specified at least once");
