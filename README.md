@@ -1,5 +1,7 @@
 [![Build Status](https://drone.io/github.com/ical4j/ical4j/status.png)](https://drone.io/github.com/ical4j/ical4j/latest) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ical4j/ical4j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+This is a change.
+
 # iCal4j - Release Notes
 
  - For a concise description of the goals and directions of iCal4j please
