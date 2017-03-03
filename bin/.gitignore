@@ -1,0 +1,10 @@
+/META-INF/
+/net/
+/overview.html
+/zoneinfo/
+/zoneinfo-global/
+/ical4j.properties
+/log4j.properties
+/logback.xml
+/samples/
+/tz.alias
