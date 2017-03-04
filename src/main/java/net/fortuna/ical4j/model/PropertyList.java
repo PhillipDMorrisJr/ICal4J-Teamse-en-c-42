@@ -36,6 +36,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 
 /**
  * $Id$ [Apr 5, 2004]
@@ -97,21 +98,35 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 	/**
 	 * Returns the first property of specified name.
 	 * 
-	 * @param aName
-	 *            name of property to return
-	 * @return a property or null if no matching property found
+	 * @param aName name of property to return @return a property or null if no
+	 * matching property found @throws
 	 */
 	public final Property getProperty(final String aName) {
 		if (aName == null) {
 			throw new IllegalArgumentException("The name of the property must not be null!");
 		}
-		for (final Property p : this) {
-			if (p.getName().equalsIgnoreCase(aName)) {
-				return p;
-			}
-		}
-		throw new PropertyNotFoundException("There are no properties by the name of " + aName);
 		
+		Property property = null;
+			for (final Property currentProperty : this) {
+				if (currentProperty.getName().equalsIgnoreCase(aName)) {
+					property = currentProperty;
+				}
+			}
+			
+		this.handlePropertyNotFOund(aName, property);
+		
+		return property;
+	}
+
+	private void handlePropertyNotFOund(final String aName, Property property) {
+		try {
+			if (property == null) {
+				throw new PropertyNotFoundException("There are no properties by the name of " + aName);
+			}
+			
+		} catch (PropertyNotFoundException exc) {
+			 System.err.println("PropertyNotFoundException: " + exc.getMessage());
+		}
 	}
 
 	/**
