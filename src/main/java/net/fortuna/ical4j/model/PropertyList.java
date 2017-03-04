@@ -36,92 +36,125 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 
 /**
  * $Id$ [Apr 5, 2004]
  *
  * Defines a list of iCalendar properties.
+ * 
  * @author Ben Fortuna
  */
 public class PropertyList extends ArrayList<Property> implements Serializable {
 
-    private static final long serialVersionUID = -8875923766224921031L;
+	private static final long serialVersionUID = -8875923766224921031L;
 
-    /**
-     * Default constructor.
-     */
-    public PropertyList() {
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PropertyList() {
+	}
 
-    /**
-     * Creates a new instance with the specified initial capacity.
-     * @param initialCapacity the initial capacity of the list
-     */
-    public PropertyList(final int initialCapacity) {
-        super(initialCapacity);
-    }
+	/**
+	 * Creates a new instance with the specified initial capacity.
+	 * 
+	 * @param initialCapacity
+	 *            the initial capacity of the list
+	 */
+	public PropertyList(final int initialCapacity) {
+		super(initialCapacity);
+	}
 
-    /**
-     * Creates a deep copy of the specified property list.
-     * @param properties a property list
-     * @throws ParseException where property data cannot be parsed
-     * @throws IOException where property data cannot be read
-     * @throws URISyntaxException where a property contains an invalid URI
-     */
-    public PropertyList(PropertyList properties) throws ParseException, IOException, URISyntaxException {
-        super();
-        for (Property p : properties) {
-            add(p.copy());
-        }
-    }
+	/**
+	 * Creates a deep copy of the specified property list.
+	 * 
+	 * @param properties
+	 *            a property list
+	 * @throws ParseException
+	 *             where property data cannot be parsed
+	 * @throws IOException
+	 *             where property data cannot be read
+	 * @throws URISyntaxException
+	 *             where a property contains an invalid URI
+	 */
+	public PropertyList(PropertyList properties) throws ParseException, IOException, URISyntaxException {
+		super();
+		for (Property p : properties) {
+			add(p.copy());
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public final String toString() {
-        final StringBuilder buffer = new StringBuilder();
-        for (Property property : this) {
-            buffer.append(property.toString());
-        }
-        return buffer.toString();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public final String toString() {
+		final StringBuilder buffer = new StringBuilder();
+		for (Property property : this) {
+			buffer.append(property.toString());
+		}
+		return buffer.toString();
+	}
 
-    /**
-     * Returns the first property of specified name.
-     * @param aName name of property to return
-     * @return a property or null if no matching property found
-     */
-    public final Property getProperty(final String aName) {
-        for (final Property p : this) {
-            if (p.getName().equalsIgnoreCase(aName)) {
-                return p;
-            }
-        }
-        return null;
-    }
+	/**
+	 * Returns the first property of specified name.
+	 * 
+	 * @param aName name of property to return @return a property or null if no
+	 * matching property found @throws
+	 */
+	public final Property getProperty(final String aName) {
+		if (aName == null) {
+			throw new IllegalArgumentException("The name of the property must not be null!");
+		}
+		
+		Property property = null;
+			for (final Property currentProperty : this) {
+				if (currentProperty.getName().equalsIgnoreCase(aName)) {
+					property = currentProperty;
+				}
+			}
+			
+		this.handlePropertyNotFOund(aName, property);
+		
+		return property;
+	}
 
-    /**
-     * Returns a list of properties with the specified name.
-     * @param name name of properties to return
-     * @return a property list
-     */
-    public final PropertyList getProperties(final String name) {
-        final PropertyList list = new PropertyList();
-        for (final Property p : this) {
-            if (p.getName().equalsIgnoreCase(name)) {
-                list.add(p);
-            }
-        }
-        return list;
-    }
+	private void handlePropertyNotFOund(final String aName, Property property) {
+		try {
+			if (property == null) {
+				throw new PropertyNotFoundException("There are no properties by the name of " + aName);
+			}
+			
+		} catch (PropertyNotFoundException exc) {
+			 System.err.println("PropertyNotFoundException: " + exc.getMessage());
+		}
+	}
 
-    /**
-     * Remove a property from the list.
-     * @param property the property to remove
-     * @return true if the list contained the specified property
-     * @see java.util.List#remove(java.lang.Object)
-     */
-    public final boolean remove(final Property property) {
-        return remove((Object) property);
-    }
+	/**
+	 * Returns a list of properties with the specified name.
+	 * 
+	 * @param name
+	 *            name of properties to return
+	 * @return a property list
+	 */
+	public final PropertyList getProperties(final String name) {
+		final PropertyList list = new PropertyList();
+		for (final Property p : this) {
+			if (p.getName().equalsIgnoreCase(name)) {
+				list.add(p);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Remove a property from the list.
+	 * 
+	 * @param property
+	 *            the property to remove
+	 * @return true if the list contained the specified property
+	 * @see java.util.List#remove(java.lang.Object)
+	 */
+	public final boolean remove(final Property property) {
+		return remove((Object) property);
+	}
 }
