@@ -98,8 +98,8 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 	/**
 	 * Returns the first property of specified name.
 	 * 
-	 * @param aName name of property to return @return a property or null if no
-	 * matching property found @throws
+	 * @param aName name of property to return @return a property or null property
+	 * matching property found @throws PropertyNotFoundException if no properties are found
 	 */
 	public final Property getProperty(final String aName) {
 		if (aName == null) {
@@ -113,12 +113,17 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 				}
 			}
 			
-		this.handlePropertyNotFOund(aName, property);
+		this.handlePropertyNotFound(aName, property);
 		
 		return property;
 	}
 
-	private void handlePropertyNotFOund(final String aName, Property property) {
+	/**
+	 * Handles PropertyNotFoundException
+	 * @param aName name of Property
+	 * @param property Property to handle
+	 */
+	private void handlePropertyNotFound(final String aName, Property property) {
 		try {
 			if (property == null) {
 				throw new PropertyNotFoundException("There are no properties by the name of " + aName);
