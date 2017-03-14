@@ -98,41 +98,31 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 	/**
 	 * Returns the first property of specified name.
 	 * 
-	 * @param aName name of property to return @return a property or null property
-	 * matching property found @throws PropertyNotFoundException if no properties are found
+	 * @param aName
+	 *            name of property to return @return a property or null property
+	 *            matching property found @throws PropertyNotFoundException if
+	 *            no properties are found
+	 * @throws PropertyNotFoundException
 	 */
-	public final Property getProperty(final String aName) {
+	public final Property getProperty(final String aName) throws PropertyNotFoundException {
 		if (aName == null) {
 			throw new IllegalArgumentException("The name of the property must not be null!");
 		}
-		
+
 		Property property = null;
-			for (final Property currentProperty : this) {
-				if (currentProperty.getName().equalsIgnoreCase(aName)) {
-					property = currentProperty;
-				}
+		for (final Property currentProperty : this) {
+			if (currentProperty.getName().equalsIgnoreCase(aName)) {
+				property = currentProperty;
 			}
-			
-		this.handlePropertyNotFound(aName, property);
+		}
 		
+		if (property == null) {
+			throw new PropertyNotFoundException("There are no properties by the name of " + aName);
+		}
+
 		return property;
 	}
 
-	/**
-	 * Handles PropertyNotFoundException
-	 * @param aName name of Property
-	 * @param property Property to handle
-	 */
-	private void handlePropertyNotFound(final String aName, Property property) {
-		try {
-			if (property == null) {
-				throw new PropertyNotFoundException("There are no properties by the name of " + aName);
-			}
-			
-		} catch (PropertyNotFoundException exc) {
-			 System.err.println("PropertyNotFoundException: " + exc.getMessage());
-		}
-	}
 
 	/**
 	 * Returns a list of properties with the specified name.
