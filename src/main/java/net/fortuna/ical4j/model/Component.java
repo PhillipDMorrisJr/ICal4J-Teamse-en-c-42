@@ -186,8 +186,9 @@ public abstract class Component implements Serializable {
      *
      * @param name name of the property to retrieve
      * @return the first matching property in the property list with the specified name
+     * @throws PropertyNotFoundException 
      */
-    public final Property getProperty(final String name) {
+    public final Property getProperty(final String name) throws PropertyNotFoundException {
         return getProperties().getProperty(name);
     }
 
@@ -197,8 +198,9 @@ public abstract class Component implements Serializable {
      * @param name name of the property to retrieve
      * @return the first matching property in the property list with the specified name
      * @throws ConstraintViolationException when a property is not found
+     * @throws PropertyNotFoundException 
      */
-    protected final Property getRequiredProperty(String name) throws ConstraintViolationException {
+    protected final Property getRequiredProperty(String name) throws ConstraintViolationException, PropertyNotFoundException {
         Property p = getProperties().getProperty(name);
         if (p == null) {
             throw new ConstraintViolationException(String.format("Missing %s property", name));
@@ -286,8 +288,9 @@ public abstract class Component implements Serializable {
      *
      * @param period a range to calculate recurrences for
      * @return a list of periods
+     * @throws PropertyNotFoundException 
      */
-    public final PeriodList calculateRecurrenceSet(final Period period) {
+    public final PeriodList calculateRecurrenceSet(final Period period) throws PropertyNotFoundException {
 
 //        validate();
 

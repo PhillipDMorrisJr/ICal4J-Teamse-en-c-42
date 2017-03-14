@@ -248,8 +248,9 @@ public class Calendar implements Serializable {
      * Convenience method for retrieving a named property.
      * @param name name of the property to retrieve
      * @return the first matching property in the property list with the specified name
+     * @throws PropertyNotFoundException 
      */
-    public final Property getProperty(final String name) {
+    public final Property getProperty(final String name) throws PropertyNotFoundException {
         return getProperties().getProperty(name);
     }
 
@@ -297,32 +298,36 @@ public class Calendar implements Serializable {
     /**
      * Returns the mandatory prodid property.
      * @return the PRODID property, or null if property doesn't exist
+     * @throws PropertyNotFoundException 
      */
-    public final ProdId getProductId() {
+    public final ProdId getProductId() throws PropertyNotFoundException {
         return (ProdId) getProperty(Property.PRODID);
     }
 
     /**
      * Returns the mandatory version property.
      * @return the VERSION property, or null if property doesn't exist
+     * @throws PropertyNotFoundException 
      */
-    public final Version getVersion() {
+    public final Version getVersion() throws PropertyNotFoundException {
         return (Version) getProperty(Property.VERSION);
     }
 
     /**
      * Returns the optional calscale property.
      * @return the CALSCALE property, or null if property doesn't exist
+     * @throws PropertyNotFoundException 
      */
-    public final CalScale getCalendarScale() {
+    public final CalScale getCalendarScale() throws PropertyNotFoundException {
         return (CalScale) getProperty(Property.CALSCALE);
     }
 
     /**
      * Returns the optional method property.
      * @return the METHOD property, or null if property doesn't exist
+     * @throws PropertyNotFoundException 
      */
-    public final Method getMethod() {
+    public final Method getMethod() throws PropertyNotFoundException {
         return (Method) getProperty(Property.METHOD);
     }
 
