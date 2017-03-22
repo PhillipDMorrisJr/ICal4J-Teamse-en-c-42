@@ -167,7 +167,12 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
     public final void register(final TimeZone timezone, boolean update) {
         if (update) {
             // load any available updates for the timezone..
-            timezones.put(timezone.getID(), new TimeZone(updateDefinition(timezone.getVTimeZone())));
+            try {
+				timezones.put(timezone.getID(), new TimeZone(updateDefinition(timezone.getVTimeZone())));
+			} catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         } else {
             timezones.put(timezone.getID(), timezone);
         }
@@ -218,7 +223,10 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
                             } catch (Exception e) {
                                 Logger log = LoggerFactory.getLogger(TimeZoneRegistryImpl.class);
                                 log.warn("Error occurred loading VTimeZone", e);
-                            }
+                            } catch (PropertyNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
                         }
                     }
                 }

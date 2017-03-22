@@ -129,8 +129,9 @@ public final class Calendars {
      * identifers (UID).
      * @param calendar a calendar instance
      * @return an array of calendar objects
+     * @throws PropertyNotFoundException 
      */
-    public static Calendar[] split(final Calendar calendar) {
+    public static Calendar[] split(final Calendar calendar) throws PropertyNotFoundException {
         // if calendar contains one component or less, or is composed entirely of timezone
         // definitions, return the original calendar unmodified..
         if (calendar.getComponents().size() <= 1
@@ -201,8 +202,9 @@ public final class Calendars {
      * @param calendar a calendar instance
      * @param charset an optional encoding
      * @return a content type string
+     * @throws PropertyNotFoundException 
      */
-    public static String getContentType(Calendar calendar, Charset charset) {
+    public static String getContentType(Calendar calendar, Charset charset) throws PropertyNotFoundException {
         final StringBuilder b = new StringBuilder("text/calendar");
         
         final Method method = (Method) calendar.getProperty(Property.METHOD);

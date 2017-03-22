@@ -178,7 +178,7 @@ public class TimeZone extends java.util.TimeZone {
 		return vTimeZone;
 	}
 
-	private static int getRawOffset(VTimeZone vt) {
+	private static int getRawOffset(VTimeZone vt) throws PropertyNotFoundException {
 
 		ComponentList<Observance> seasonalTimes = vt.getObservances().getComponents(Observance.STANDARD);
 		// if no standard time use daylight time..

@@ -242,7 +242,12 @@ public class CalendarBuilder {
                 calendar.getComponents().add(component);
                 if (component instanceof VTimeZone && tzRegistry != null) {
                     // register the timezone for use with iCalendar objects..
-                    tzRegistry.register(new TimeZone((VTimeZone) component));
+                    try {
+						tzRegistry.register(new TimeZone((VTimeZone) component));
+					} catch (PropertyNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 }
                 component = null;
             }

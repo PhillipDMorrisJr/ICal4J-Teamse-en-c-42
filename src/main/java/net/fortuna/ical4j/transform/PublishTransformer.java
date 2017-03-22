@@ -35,6 +35,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.Sequence;
 
@@ -44,42 +45,47 @@ import net.fortuna.ical4j.model.property.Sequence;
  * Created: 26/09/2004
  *
  * Transforms a calendar for publishing.
+ * 
  * @author benfortuna
  */
 public class PublishTransformer extends Transformer {
 
-    /**
-     * {@inheritDoc}
-     */
-    public final Calendar transform(final Calendar calendar) {
-        PropertyList calProps = calendar.getProperties();
+	/**
+	 * {@inheritDoc}
+	 */
+	public final Calendar transform(final Calendar calendar) {
+		PropertyList calProps = calendar.getProperties();
 
-        Property method = calProps.getProperty(Property.METHOD);
+		Property method;
+		try {
+			method = calProps.getProperty(Property.METHOD);
 
-        if (method != null) {
-            calProps.remove(method);
-        }
+			if (method != null) {
+				calProps.remove(method);
+			}
 
-        calProps.add(Method.PUBLISH);
+			calProps.add(Method.PUBLISH);
 
-        // if a calendar component has already been published previously
-        // update the sequence number..
-        for (Component component : calendar.getComponents()) {
-            PropertyList compProps = component.getProperties();
+			// if a calendar component has already been published previously
+			// update the sequence number..
+			for (Component component : calendar.getComponents()) {
+				PropertyList compProps = component.getProperties();
 
-            Sequence sequence = (Sequence) compProps
-                    .getProperty(Property.SEQUENCE);
+				Sequence sequence = (Sequence) compProps.getProperty(Property.SEQUENCE);
 
-            if (sequence == null) {
-                compProps.add(new Sequence(0));
-            }
-            else {
-                compProps.remove(sequence);
-                compProps.add(new Sequence(sequence.getSequenceNo() + 1));
-            }
-        }
+				if (sequence == null) {
+					compProps.add(new Sequence(0));
+				} else {
+					compProps.remove(sequence);
+					compProps.add(new Sequence(sequence.getSequenceNo() + 1));
+				}
+			}
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        return calendar;
-    }
+		return calendar;
+	}
 
 }

@@ -32,6 +32,7 @@
 package net.fortuna.ical4j.validate;
 
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 
 /**
  * $Id$ [15-May-2004]
@@ -118,8 +119,9 @@ public final class PropertyValidator {
      * @param properties a list of properties
      * @throws ValidationException thrown when the specified property
      * is found in the list of properties
+     * @throws PropertyNotFoundException 
      */
-    public void assertNone(final String propertyName, final PropertyList properties) throws ValidationException {
+    public void assertNone(final String propertyName, final PropertyList properties) throws ValidationException, PropertyNotFoundException {
         if (properties.getProperty(propertyName) != null) {
             throw new ValidationException(ASSERT_NONE_MESSAGE, new Object[] {propertyName});
         }

@@ -34,6 +34,7 @@ package net.fortuna.ical4j.filter;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.PeriodList;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 
 /**
  * $Id$
@@ -59,31 +60,14 @@ public class PeriodRule<T extends Component> implements Rule<T> {
      * {@inheritDoc}
      */
     public final boolean match(final Component component) {
-
-        /*
-        DtStart start = (DtStart) component.getProperty(Property.DTSTART);
-        DtEnd end = (DtEnd) component.getProperty(Property.DTEND);
-        Duration duration = (Duration) component.getProperty(Property.DURATION);
         
-        if (start == null) {
-            return false;
-        }
-        
-        // detect events that consume no time..
-        if (end == null && duration == null) {
-            if (period.includes(start.getDate(), Period.INCLUSIVE_START)) {
-                return true;
-            }
-        }
-        */
-        
-//        try {
+        try {
         final PeriodList recurrenceSet = component.calculateRecurrenceSet(period);
         return (!recurrenceSet.isEmpty());
-//        }
-//        catch (ValidationException ve) {
-//            log.error("Invalid component data", ve);
-//            return false;
-//        }
+        }
+        catch (PropertyNotFoundException e) {
+        	e.printStackTrace();
+            return false;
+        }
     }
 }
