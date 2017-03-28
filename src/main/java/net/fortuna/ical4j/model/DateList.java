@@ -58,13 +58,13 @@ public class DateList implements List<Date>, Serializable {
     private TimeZone timeZone;
     
     private boolean utc;
-
-    /**
-     * Default constructor.
-     */
-    public DateList() {
-    	this(false);
-    }
+//
+//    /**
+//     * Default constructor.
+//     */
+//    public DateList() {
+//    	this(false);
+//    }
 
     public DateList(final boolean unmodifiable) {
     
@@ -77,13 +77,13 @@ public class DateList implements List<Date>, Serializable {
         }
     }
 
-    /**
-     * @param aType the type of dates contained by the instance
-     */
-    public DateList(final Value aType) {
-        this(aType, null);
-    }
-    
+//    /**
+//     * @param aType the type of dates contained by the instance
+//     */
+//    public DateList(final Value aType) {
+//        this(aType, null);
+//    }
+//    
     /**
      * Default constructor.
      * 
@@ -98,6 +98,7 @@ public class DateList implements List<Date>, Serializable {
             this.type = Value.DATE_TIME;
         }
         this.timeZone = timezone;
+        
         dates = new ArrayList<Date>();
     }
 
@@ -217,7 +218,7 @@ public class DateList implements List<Date>, Serializable {
      * @see List#remove(java.lang.Object)
      */
     public final boolean remove(final Date date) {
-        return remove((Object) date);
+        return remove(date);
     }
 
     /**
