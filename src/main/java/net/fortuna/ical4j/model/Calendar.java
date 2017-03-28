@@ -257,8 +257,9 @@ public class Calendar implements Serializable {
     /**
      * Perform validation on the calendar, its properties and its components in its current state.
      * @throws ValidationException where the calendar is not in a valid state
+     * @throws PropertyNotFoundException 
      */
-    public final void validate() throws ValidationException {
+    public final void validate() throws ValidationException, PropertyNotFoundException {
         validate(true);
     }
 
@@ -266,8 +267,9 @@ public class Calendar implements Serializable {
      * Perform validation on the calendar in its current state.
      * @param recurse indicates whether to validate the calendar's properties and components
      * @throws ValidationException where the calendar is not in a valid state
+     * @throws PropertyNotFoundException 
      */
-    public void validate(final boolean recurse) throws ValidationException {
+    public void validate(final boolean recurse) throws ValidationException, PropertyNotFoundException {
         validator.validate(this);
         if (recurse) {
             validateProperties();
@@ -288,8 +290,9 @@ public class Calendar implements Serializable {
     /**
      * Invoke validation on the calendar components in its current state.
      * @throws ValidationException where any of the calendar components is not in a valid state
+     * @throws PropertyNotFoundException 
      */
-    private void validateComponents() throws ValidationException {
+    private void validateComponents() throws ValidationException, PropertyNotFoundException {
         for (Component component : getComponents()) {
             component.validate();
         }

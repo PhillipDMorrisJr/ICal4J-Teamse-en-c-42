@@ -309,8 +309,9 @@ public class VEvent extends CalendarComponent {
 
     /**
      * {@inheritDoc}
+     * @throws PropertyNotFoundException 
      */
-    public final void validate(final boolean recurse) throws ValidationException {
+    public final void validate(final boolean recurse) throws ValidationException, PropertyNotFoundException {
 
         // validate that getAlarms() only contains VAlarm components
 //        final Iterator iterator = getAlarms().iterator();
@@ -458,23 +459,28 @@ public class VEvent extends CalendarComponent {
             final Date rangeEnd, final boolean normalise) {
         PeriodList periods = new PeriodList();
         // if component is transparent return empty list..
-        if (!Transp.TRANSPARENT.equals(getProperty(Property.TRANSP))) {
+        try {
+			if (!Transp.TRANSPARENT.equals(getProperty(Property.TRANSP))) {
 
 //          try {
-          periods = calculateRecurrenceSet(new Period(new DateTime(rangeStart),
-                  new DateTime(rangeEnd)));
+			  periods = calculateRecurrenceSet(new Period(new DateTime(rangeStart),
+			          new DateTime(rangeEnd)));
 //          }
 //          catch (ValidationException ve) {
 //              log.error("Invalid event data", ve);
 //              return periods;
 //          }
 
-          // if periods already specified through recurrence, return..
-          // ..also normalise before returning.
-          if (!periods.isEmpty() && normalise) {
-              periods = periods.normalise();
-          }
-        }
+			  // if periods already specified through recurrence, return..
+			  // ..also normalise before returning.
+			  if (!periods.isEmpty() && normalise) {
+			      periods = periods.normalise();
+			  }
+			}
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         return periods;
     }
@@ -506,112 +512,139 @@ public class VEvent extends CalendarComponent {
      * @return the optional access classification property for an event
      */
     public final Clazz getClassification() {
-        return (Clazz) getProperty(Property.CLASS);
+        try {
+			return (Clazz) getProperty(Property.CLASS);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
      * @return the optional creation-time property for an event
      */
     public final Created getCreated() {
-        return (Created) getProperty(Property.CREATED);
+        try {
+			return (Created) getProperty(Property.CREATED);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
      * @return the optional description property for an event
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Description getDescription() {
-        return (Description) getProperty(Property.DESCRIPTION);
+    public final Description getDescription() throws PropertyNotFoundException {
+			return (Description) getProperty(Property.DESCRIPTION);
+
     }
 
     /**
      * Convenience method to pull the DTSTART out of the property list.
      * @return The DtStart object representation of the start Date
+     * @throws PropertyNotFoundException 
      */
-    public final DtStart getStartDate() {
+    public final DtStart getStartDate() throws PropertyNotFoundException {
         return (DtStart) getProperty(Property.DTSTART);
     }
 
     /**
      * @return the optional geographic position property for an event
+     * @throws PropertyNotFoundException property not not found 
      */
-    public final Geo getGeographicPos() {
+    public final Geo getGeographicPos() throws PropertyNotFoundException {
         return (Geo) getProperty(Property.GEO);
     }
 
     /**
      * @return the optional last-modified property for an event
+     * @throws PropertyNotFoundException  property not not found 
      */
-    public final LastModified getLastModified() {
+    public final LastModified getLastModified() throws PropertyNotFoundException {
         return (LastModified) getProperty(Property.LAST_MODIFIED);
     }
 
     /**
      * @return the optional location property for an event
+     * @throws PropertyNotFoundException  property not not found 
      */
-    public final Location getLocation() {
+    public final Location getLocation() throws PropertyNotFoundException {
         return (Location) getProperty(Property.LOCATION);
     }
 
     /**
      * @return the optional organizer property for an event
+     * @throws PropertyNotFoundException  property not not found 
      */
-    public final Organizer getOrganizer() {
+    public final Organizer getOrganizer() throws PropertyNotFoundException {
         return (Organizer) getProperty(Property.ORGANIZER);
     }
 
     /**
      * @return the optional priority property for an event
+     * @throws PropertyNotFoundException  property not not found 
      */
-    public final Priority getPriority() {
+    public final Priority getPriority() throws PropertyNotFoundException {
         return (Priority) getProperty(Property.PRIORITY);
     }
 
     /**
      * @return the optional date-stamp property
+     * @throws PropertyNotFoundException  property not not found 
      */
-    public final DtStamp getDateStamp() {
+    public final DtStamp getDateStamp() throws PropertyNotFoundException {
         return (DtStamp) getProperty(Property.DTSTAMP);
     }
 
     /**
      * @return the optional sequence number property for an event
+     * @throws PropertyNotFoundException property not not found 
      */
-    public final Sequence getSequence() {
+    public final Sequence getSequence() throws PropertyNotFoundException {
         return (Sequence) getProperty(Property.SEQUENCE);
     }
 
     /**
      * @return the optional status property for an event
+     * @throws PropertyNotFoundException property not not found 
      */
-    public final Status getStatus() {
+    public final Status getStatus() throws PropertyNotFoundException {
         return (Status) getProperty(Property.STATUS);
     }
 
     /**
      * @return the optional summary property for an event
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Summary getSummary() {
+    public final Summary getSummary() throws PropertyNotFoundException {
         return (Summary) getProperty(Property.SUMMARY);
     }
 
     /**
      * @return the optional time transparency property for an event
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Transp getTransparency() {
+    public final Transp getTransparency() throws PropertyNotFoundException {
         return (Transp) getProperty(Property.TRANSP);
     }
 
     /**
      * @return the optional URL property for an event
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Url getUrl() {
+    public final Url getUrl() throws PropertyNotFoundException {
         return (Url) getProperty(Property.URL);
     }
 
     /**
      * @return the optional recurrence identifier property for an event
+     * @throws PropertyNotFoundException property not not found
      */
-    public final RecurrenceId getRecurrenceId() {
+    public final RecurrenceId getRecurrenceId() throws PropertyNotFoundException {
         return (RecurrenceId) getProperty(Property.RECURRENCE_ID);
     }
 
@@ -619,8 +652,9 @@ public class VEvent extends CalendarComponent {
      * Returns the end date of this event. Where an end date is not available it will be derived from the event
      * duration.
      * @return a DtEnd instance, or null if one cannot be derived
+     * @throws PropertyNotFoundException property not not found
      */
-    public final DtEnd getEndDate() {
+    public final DtEnd getEndDate() throws PropertyNotFoundException {
         return getEndDate(true);
     }
 
@@ -630,8 +664,9 @@ public class VEvent extends CalendarComponent {
      * @param deriveFromDuration specifies whether to derive an end date from the event duration where an end date is
      * not found
      * @return The end for this VEVENT.
+     * @throws PropertyNotFoundException 
      */
-    public final DtEnd getEndDate(final boolean deriveFromDuration) {
+    public final DtEnd getEndDate(final boolean deriveFromDuration) throws PropertyNotFoundException {
         DtEnd dtEnd = (DtEnd) getProperty(Property.DTEND);
         // No DTEND? No problem, we'll use the DURATION.
         if (dtEnd == null && deriveFromDuration && getStartDate() != null) {
@@ -659,16 +694,18 @@ public class VEvent extends CalendarComponent {
 
     /**
      * @return the optional Duration property
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Duration getDuration() {
+    public final Duration getDuration() throws PropertyNotFoundException {
         return (Duration) getProperty(Property.DURATION);
     }
 
     /**
      * Returns the UID property of this component if available.
      * @return a Uid instance, or null if no UID property exists
+     * @throws PropertyNotFoundException property not not found
      */
-    public final Uid getUid() {
+    public final Uid getUid() throws PropertyNotFoundException {
         return (Uid) getProperty(Property.UID);
     }
 

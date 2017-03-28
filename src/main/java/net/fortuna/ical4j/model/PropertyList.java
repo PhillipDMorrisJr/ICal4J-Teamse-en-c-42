@@ -105,7 +105,7 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 	 * @throws PropertyNotFoundException
 	 *             Property is not in PropertyList
 	 */
-	public final Property getProperty(final String aName) throws PropertyNotFoundException {
+	public final Property getProperty(final String aName) throws PropertyNotFoundException{
 		if (aName == null) {
 			throw new IllegalArgumentException("The name of the property must not be null!");
 		}
@@ -117,10 +117,10 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 			}
 		}
 		if (property == null) {
-			throw new PropertyNotFoundException("There are no properties by the name of " + aName);
+			return property;
+		} else {
+			throw new PropertyNotFoundException("Property was not found");
 		}
-
-		return property;
 	}
 
 	/**

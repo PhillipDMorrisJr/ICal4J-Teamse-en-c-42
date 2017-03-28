@@ -110,9 +110,10 @@ public class Available extends Component {
 
     /**
      * {@inheritDoc}
+     * @throws PropertyNotFoundException 
      */
     public final void validate(final boolean recurse)
-            throws ValidationException {
+            throws ValidationException, PropertyNotFoundException {
 
         /*
          * ; dtstamp / dtstart / uid are required, but MUST NOT occur more than once /

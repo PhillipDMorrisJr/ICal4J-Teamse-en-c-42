@@ -212,8 +212,9 @@ public abstract class Component implements Serializable {
      * Perform validation on a component and its properties.
      *
      * @throws ValidationException where the component is not in a valid state
+     * @throws PropertyNotFoundException 
      */
-    public final void validate() throws ValidationException {
+    public final void validate() throws ValidationException, PropertyNotFoundException {
         validate(true);
     }
 
@@ -222,9 +223,10 @@ public abstract class Component implements Serializable {
      *
      * @param recurse indicates whether to validate the component's properties
      * @throws ValidationException where the component is not in a valid state
+     * @throws PropertyNotFoundException 
      */
     public abstract void validate(final boolean recurse)
-            throws ValidationException;
+            throws ValidationException, PropertyNotFoundException;
 
     /**
      * Invoke validation on the component properties in its current state.

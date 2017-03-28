@@ -263,7 +263,10 @@ public class VAlarm extends CalendarComponent {
         catch (ValidationException ve) {
             PropertyValidator.getInstance().assertOne(Property.DURATION, getProperties());
             PropertyValidator.getInstance().assertOne(Property.REPEAT, getProperties());
-        }
+        } catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         /*
          * ; the following is optional, ; and MAY occur more than once x-prop
@@ -291,7 +294,13 @@ public class VAlarm extends CalendarComponent {
      * @return the ACTION property or null if not specified
      */
     public final Action getAction() {
-        return (Action) getProperty(Property.ACTION);
+        try {
+			return (Action) getProperty(Property.ACTION);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -299,7 +308,13 @@ public class VAlarm extends CalendarComponent {
      * @return the TRIGGER property or null if not specified
      */
     public final Trigger getTrigger() {
-        return (Trigger) getProperty(Property.TRIGGER);
+        try {
+			return (Trigger) getProperty(Property.TRIGGER);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -307,7 +322,13 @@ public class VAlarm extends CalendarComponent {
      * @return the DURATION property or null if not specified
      */
     public final Duration getDuration() {
-        return (Duration) getProperty(Property.DURATION);
+        try {
+			return (Duration) getProperty(Property.DURATION);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -315,7 +336,13 @@ public class VAlarm extends CalendarComponent {
      * @return the REPEAT property or null if not specified
      */
     public final Repeat getRepeat() {
-        return (Repeat) getProperty(Property.REPEAT);
+        try {
+			return (Repeat) getProperty(Property.REPEAT);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -323,7 +350,14 @@ public class VAlarm extends CalendarComponent {
      * @return the ATTACH property or null if not specified
      */
     public final Attach getAttachment() {
-        return (Attach) getProperty(Property.ATTACH);
+        try {
+			return (Attach) getProperty(Property.ATTACH);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
     }
 
     /**
@@ -331,7 +365,13 @@ public class VAlarm extends CalendarComponent {
      * @return the DESCRIPTION property or null if not specified
      */
     public final Description getDescription() {
-        return (Description) getProperty(Property.DESCRIPTION);
+        try {
+			return (Description) getProperty(Property.DESCRIPTION);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -339,7 +379,13 @@ public class VAlarm extends CalendarComponent {
      * @return the SUMMARY property or null if not specified
      */
     public final Summary getSummary() {
-        return (Summary) getProperty(Property.SUMMARY);
+        try {
+			return (Summary) getProperty(Property.SUMMARY);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     public static class Factory extends Content.Factory implements ComponentFactory<VAlarm> {

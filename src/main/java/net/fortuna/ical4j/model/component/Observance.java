@@ -168,7 +168,10 @@ public abstract class Observance extends Component {
                 log.error("Unexpected error calculating initial onset", e);
                 // XXX: is this correct?
                 return null;
-            }
+            } catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         // observance not applicable if date is before the effective date of this observance..
@@ -192,7 +195,11 @@ public abstract class Observance extends Component {
             log.error("Unexpected error calculating initial onset", e);
             // XXX: is this correct?
             return null;
-        }
+        } catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
         // collect all onsets for the purposes of caching..
         final DateList cacheableOnsets = new DateList();
         cacheableOnsets.setUtc(true);
@@ -281,7 +288,13 @@ public abstract class Observance extends Component {
      * @return the DTSTART property or null if not specified
      */
     public final DtStart getStartDate() {
-        return (DtStart) getProperty(Property.DTSTART);
+        try {
+			return (DtStart) getProperty(Property.DTSTART);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -290,7 +303,13 @@ public abstract class Observance extends Component {
      * @return the TZOFFSETFROM property or null if not specified
      */
     public final TzOffsetFrom getOffsetFrom() {
-        return (TzOffsetFrom) getProperty(Property.TZOFFSETFROM);
+        try {
+			return (TzOffsetFrom) getProperty(Property.TZOFFSETFROM);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -299,7 +318,13 @@ public abstract class Observance extends Component {
      * @return the TZOFFSETTO property or null if not specified
      */
     public final TzOffsetTo getOffsetTo() {
-        return (TzOffsetTo) getProperty(Property.TZOFFSETTO);
+        try {
+			return (TzOffsetTo) getProperty(Property.TZOFFSETTO);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
     }
 
     //    private Date calculateOnset(DateProperty dateProperty) {

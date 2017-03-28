@@ -262,22 +262,25 @@ public class VTimeZone extends CalendarComponent {
 
     /**
      * @return the mandatory timezone identifier property
+     * @throws PropertyNotFoundException property not found
      */
-    public final TzId getTimeZoneId() {
+    public final TzId getTimeZoneId() throws PropertyNotFoundException {
         return (TzId) getProperty(Property.TZID);
     }
 
     /**
      * @return the optional last-modified property
+     * @throws PropertyNotFoundException property not found
      */
-    public final LastModified getLastModified() {
+    public final LastModified getLastModified() throws PropertyNotFoundException {
         return (LastModified) getProperty(Property.LAST_MODIFIED);
     }
 
     /**
      * @return the optional timezone url property
+     * @throws PropertyNotFoundException property not found
      */
-    public final TzUrl getTimeZoneUrl() {
+    public final TzUrl getTimeZoneUrl() throws PropertyNotFoundException {
         return (TzUrl) getProperty(Property.TZURL);
     }
 

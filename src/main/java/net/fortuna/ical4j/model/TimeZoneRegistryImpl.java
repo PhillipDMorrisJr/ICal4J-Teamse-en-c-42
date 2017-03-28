@@ -258,9 +258,10 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
      * @return
      */
     private VTimeZone updateDefinition(VTimeZone vTimeZone) {
-        final TzUrl tzUrl = vTimeZone.getTimeZoneUrl();
-        if (tzUrl != null) {
-            try {
+       
+        
+            try { 
+            	final TzUrl tzUrl = vTimeZone.getTimeZoneUrl();
                 final String connectTimeoutProperty = Configurator.getProperty(UPDATE_CONNECT_TIMEOUT);
                 final String readTimeoutProperty = Configurator.getProperty(UPDATE_READ_TIMEOUT);
 
@@ -289,9 +290,17 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
                 }
             } catch (Exception e) {
                 Logger log = LoggerFactory.getLogger(TimeZoneRegistryImpl.class);
-                log.warn("Unable to retrieve updates for timezone: " + vTimeZone.getTimeZoneId().getValue(), e);
-            }
-        }
+                try {
+					log.warn("Unable to retrieve updates for timezone: " + vTimeZone.getTimeZoneId().getValue(), e);
+				} catch (PropertyNotFoundException e1) {
+					e1.printStackTrace();
+				}
+                
+            } catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        
         return vTimeZone;
     }
 }

@@ -32,6 +32,7 @@
 package net.fortuna.ical4j.data;
 
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.validate.ValidationException;
 
 import java.io.IOException;
@@ -93,7 +94,12 @@ public class CalendarOutputter extends AbstractOutputter {
     public final void output(final Calendar calendar, final Writer out)
             throws IOException, ValidationException {
         if (isValidating()) {
-            calendar.validate();
+            try {
+				calendar.validate();
+			} catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         final FoldingWriter writer = new FoldingWriter(out, foldLength);

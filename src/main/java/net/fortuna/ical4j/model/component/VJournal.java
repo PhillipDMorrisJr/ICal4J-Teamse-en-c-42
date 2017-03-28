@@ -152,9 +152,10 @@ public class VJournal extends CalendarComponent {
 
     /**
      * {@inheritDoc}
+     * @throws PropertyNotFoundException 
      */
     public final void validate(final boolean recurse)
-            throws ValidationException {
+            throws ValidationException, PropertyNotFoundException {
 
         if (!CompatibilityHints
                 .isHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION)) {
@@ -212,94 +213,107 @@ public class VJournal extends CalendarComponent {
 
     /**
      * @return the optional access classification property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Clazz getClassification() {
+    public final Clazz getClassification() throws PropertyNotFoundException {
         return (Clazz) getProperty(Property.CLASS);
     }
 
     /**
      * @return the optional creation-time property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Created getCreated() {
+    public final Created getCreated() throws PropertyNotFoundException {
         return (Created) getProperty(Property.CREATED);
     }
 
     /**
      * @return the optional description property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Description getDescription() {
+    public final Description getDescription() throws PropertyNotFoundException {
         return (Description) getProperty(Property.DESCRIPTION);
     }
 
     /**
      * Convenience method to pull the DTSTART out of the property list.
      * @return The DtStart object representation of the start Date
+     * @throws PropertyNotFoundException property not found
      */
-    public final DtStart getStartDate() {
+    public final DtStart getStartDate() throws PropertyNotFoundException {
         return (DtStart) getProperty(Property.DTSTART);
     }
 
     /**
      * @return the optional last-modified property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final LastModified getLastModified() {
+    public final LastModified getLastModified() throws PropertyNotFoundException {
         return (LastModified) getProperty(Property.LAST_MODIFIED);
     }
 
     /**
      * @return the optional organizer property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Organizer getOrganizer() {
+    public final Organizer getOrganizer() throws PropertyNotFoundException {
         return (Organizer) getProperty(Property.ORGANIZER);
     }
 
     /**
      * @return the optional date-stamp property
+     * @throws PropertyNotFoundException property not found
      */
-    public final DtStamp getDateStamp() {
+    public final DtStamp getDateStamp() throws PropertyNotFoundException {
         return (DtStamp) getProperty(Property.DTSTAMP);
     }
 
     /**
      * @return the optional sequence number property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Sequence getSequence() {
+    public final Sequence getSequence() throws PropertyNotFoundException {
         return (Sequence) getProperty(Property.SEQUENCE);
     }
 
     /**
      * @return the optional status property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Status getStatus() {
+    public final Status getStatus() throws PropertyNotFoundException {
         return (Status) getProperty(Property.STATUS);
     }
 
     /**
      * @return the optional summary property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Summary getSummary() {
+    public final Summary getSummary() throws PropertyNotFoundException {
         return (Summary) getProperty(Property.SUMMARY);
     }
 
     /**
      * @return the optional URL property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final Url getUrl() {
+    public final Url getUrl() throws PropertyNotFoundException {
         return (Url) getProperty(Property.URL);
     }
 
     /**
      * @return the optional recurrence identifier property for a journal entry
+     * @throws PropertyNotFoundException property not found
      */
-    public final RecurrenceId getRecurrenceId() {
+    public final RecurrenceId getRecurrenceId() throws PropertyNotFoundException {
         return (RecurrenceId) getProperty(Property.RECURRENCE_ID);
     }
 
     /**
      * Returns the UID property of this component if available.
      * @return a Uid instance, or null if no UID property exists
+     * @throws PropertyNotFoundException property not found
      */
-    public final Uid getUid() {
+    public final Uid getUid() throws PropertyNotFoundException {
         return (Uid) getProperty(Property.UID);
     }
 

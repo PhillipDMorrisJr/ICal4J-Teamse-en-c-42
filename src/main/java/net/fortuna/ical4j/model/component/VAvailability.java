@@ -90,8 +90,8 @@ import java.util.Arrays;
                             categories / comment / contact / x-prop
 
                             )
-
  *
+ * 
  * </pre>
  *
  * @author Ben Fortuna
@@ -100,179 +100,185 @@ import java.util.Arrays;
 public class VAvailability extends CalendarComponent {
 
 	private static final long serialVersionUID = -3001603309266267258L;
-	
+
 	private ComponentList<Available> available;
 
-    /**
-     * Default constructor.
-     */
-    public VAvailability() {
-        this(true);
-    }
+	/**
+	 * Default constructor.
+	 */
+	public VAvailability() {
+		this(true);
+	}
 
-    public VAvailability(boolean initialise) {
-        super(VAVAILABILITY);
-        this.available = new ComponentList<Available>();
-        if (initialise) {
-            getProperties().add(new DtStamp());
-        }
-    }
+	public VAvailability(boolean initialise) {
+		super(VAVAILABILITY);
+		this.available = new ComponentList<Available>();
+		if (initialise) {
+			getProperties().add(new DtStamp());
+		}
+	}
 
-    /**
-     * Constructs a new instance containing the specified properties.
-     * @param properties a list of properties
-     */
-    public VAvailability(final PropertyList properties) {
-        super(VAVAILABILITY, properties);
-        this.available = new ComponentList<Available>();
-    }
+	/**
+	 * Constructs a new instance containing the specified properties.
+	 * 
+	 * @param properties
+	 *            a list of properties
+	 */
+	public VAvailability(final PropertyList properties) {
+		super(VAVAILABILITY, properties);
+		this.available = new ComponentList<Available>();
+	}
 
-    /**
-     * Constructor.
-     * @param properties a list of properties
-     * @param available a list of available components
-     */
-    public VAvailability(final PropertyList properties, final ComponentList<Available> available) {
-        super(VEVENT, properties);
-        this.available = available;
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param properties
+	 *            a list of properties
+	 * @param available
+	 *            a list of available components
+	 */
+	public VAvailability(final PropertyList properties, final ComponentList<Available> available) {
+		super(VEVENT, properties);
+		this.available = available;
+	}
 
-    /**
-     * Returns the list of available times.
-     * @return a component list
-     */
-    public final ComponentList<Available> getAvailable() {
-        return available;
-    }
+	/**
+	 * Returns the list of available times.
+	 * 
+	 * @return a component list
+	 */
+	public final ComponentList<Available> getAvailable() {
+		return available;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public final String toString() {
-        String b = BEGIN +
-                ':' +
-                getName() +
-                Strings.LINE_SEPARATOR +
-                getProperties() +
-                getAvailable() +
-                END +
-                ':' +
-                getName() +
-                Strings.LINE_SEPARATOR;
-        return b;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public final String toString() {
+		String b = BEGIN + ':' + getName() + Strings.LINE_SEPARATOR + getProperties() + getAvailable() + END + ':'
+				+ getName() + Strings.LINE_SEPARATOR;
+		return b;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public final void validate(final boolean recurse)
-            throws ValidationException {
+	/**
+	 * {@inheritDoc}
+	 */
+	public final void validate(final boolean recurse) throws ValidationException {
 
-        // validate that getAvailable() only contains Available components
-//        final Iterator<Available> iterator = getAvailable().iterator();
-//        while (iterator.hasNext()) {
-//            final Component component = (Component) iterator.next();
-//
-//            if (!(component instanceof Available)) {
-//                throw new ValidationException("Component ["
-//                        + component.getName() + "] may not occur in VAVAILABILITY");
-//            }
-//        }
+		// validate that getAvailable() only contains Available components
+		// final Iterator<Available> iterator = getAvailable().iterator();
+		// while (iterator.hasNext()) {
+		// final Component component = (Component) iterator.next();
+		//
+		// if (!(component instanceof Available)) {
+		// throw new ValidationException("Component ["
+		// + component.getName() + "] may not occur in VAVAILABILITY");
+		// }
+		// }
 
-        /*
-         * ; dtstamp / dtstart / uid are required, but MUST NOT occur more than once /
-         */
-        CollectionUtils.forAllDo(Arrays.asList(Property.DTSTART, Property.DTSTAMP, Property.UID), new Closure<String>() {
-            @Override
-            public void execute(String input) {
-                PropertyValidator.getInstance().assertOne(input, getProperties());
-            }
-        });
+		/*
+		 * ; dtstamp / dtstart / uid are required, but MUST NOT occur more than
+		 * once /
+		 */
+		CollectionUtils.forAllDo(Arrays.asList(Property.DTSTART, Property.DTSTAMP, Property.UID),
+				new Closure<String>() {
+					@Override
+					public void execute(String input) {
+						PropertyValidator.getInstance().assertOne(input, getProperties());
+					}
+				});
 
-        /*       If specified, the "DTSTART" and "DTEND" properties in
-         *      "VAVAILABILITY" components and "AVAILABLE" sub-components MUST be
-         *      "DATE-TIME" values specified as either date with UTC time or date
-         *      with local time and a time zone reference.
-         */
-        final DtStart start = (DtStart) getProperty(Property.DTSTART);
-        if (Value.DATE.equals(start.getParameter(Parameter.VALUE))) {
-            throw new ValidationException("Property [" + Property.DTSTART
-                    + "] must be a " + Value.DATE_TIME);
-        }
+		/*
+		 * If specified, the "DTSTART" and "DTEND" properties in "VAVAILABILITY"
+		 * components and "AVAILABLE" sub-components MUST be "DATE-TIME" values
+		 * specified as either date with UTC time or date with local time and a
+		 * time zone reference.
+		 */
+		DtStart start;
+		try {
+			start = (DtStart) getProperty(Property.DTSTART);
 
-        /*
-         * ; either 'dtend' or 'duration' may appear in ; a 'eventprop', but 'dtend' and 'duration' ; MUST NOT occur in
-         * the same 'eventprop' dtend / duration /
-         */
-        if (getProperty(Property.DTEND) != null) {
-            PropertyValidator.getInstance().assertOne(Property.DTEND,
-                    getProperties());
-            /* Must be DATE_TIME */
-            final DtEnd end = (DtEnd) getProperty(Property.DTEND);
-            if (Value.DATE.equals(end.getParameter(Parameter.VALUE))) {
-                throw new ValidationException("Property [" + Property.DTEND
-                        + "] must be a " + Value.DATE_TIME);
-            }
+			if (Value.DATE.equals(start.getParameter(Parameter.VALUE))) {
+				throw new ValidationException("Property [" + Property.DTSTART + "] must be a " + Value.DATE_TIME);
+			}
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
+		 * ; either 'dtend' or 'duration' may appear in ; a 'eventprop', but
+		 * 'dtend' and 'duration' ; MUST NOT occur in the same 'eventprop' dtend
+		 * / duration /
+		 */
+		try {
+			if (getProperty(Property.DTEND) != null) {
+				PropertyValidator.getInstance().assertOne(Property.DTEND, getProperties());
+				/* Must be DATE_TIME */
+				final DtEnd end = (DtEnd) getProperty(Property.DTEND);
+				if (Value.DATE.equals(end.getParameter(Parameter.VALUE))) {
+					throw new ValidationException("Property [" + Property.DTEND + "] must be a " + Value.DATE_TIME);
+				}
 
-            if (getProperty(Property.DURATION) != null) {
-                throw new ValidationException("Only one of Property [" + Property.DTEND
-                        + "] or [" + Property.DURATION +
-                        " must appear a VAVAILABILITY");
-            }
-        }
+				if (getProperty(Property.DURATION) != null) {
+					throw new ValidationException("Only one of Property [" + Property.DTEND + "] or ["
+							+ Property.DURATION + " must appear a VAVAILABILITY");
+				}
+			}
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        /*
-         *                ; the following are optional,
-         *                ; but MUST NOT occur more than once
-         *
-         *                  busytype / created / last-mod /
-         *                  organizer / seq / summary / url /
-         */
-        CollectionUtils.forAllDo(Arrays.asList(Property.BUSYTYPE, Property.CREATED, Property.LAST_MODIFIED,
-                Property.ORGANIZER, Property.SEQUENCE, Property.SUMMARY, Property.URL), new Closure<String>() {
-            @Override
-            public void execute(String input) {
-                PropertyValidator.getInstance().assertOneOrLess(input, getProperties());
-            }
-        });
+		/*
+		 * ; the following are optional, ; but MUST NOT occur more than once
+		 *
+		 * busytype / created / last-mod / organizer / seq / summary / url /
+		 */
+		CollectionUtils.forAllDo(Arrays.asList(Property.BUSYTYPE, Property.CREATED, Property.LAST_MODIFIED,
+				Property.ORGANIZER, Property.SEQUENCE, Property.SUMMARY, Property.URL), new Closure<String>() {
+					@Override
+					public void execute(String input) {
+						PropertyValidator.getInstance().assertOneOrLess(input, getProperties());
+					}
+				});
 
-        /*
-         * ; the following are optional, ; and MAY occur more than once
-         *                 categories / comment / contact / x-prop
-         */
+		/*
+		 * ; the following are optional, ; and MAY occur more than once
+		 * categories / comment / contact / x-prop
+		 */
 
-        if (recurse) {
-            validateProperties();
-        }
-    }
+		if (recurse) {
+			validateProperties();
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    protected Validator getValidator(Method method) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	protected Validator getValidator(Method method) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public static class Factory extends Content.Factory implements ComponentFactory<VAvailability> {
+	public static class Factory extends Content.Factory implements ComponentFactory<VAvailability> {
 
-        public Factory() {
-            super(VAVAILABILITY);
-        }
+		public Factory() {
+			super(VAVAILABILITY);
+		}
 
-        @Override
-        public VAvailability createComponent() {
-            return new VAvailability(false);
-        }
+		@Override
+		public VAvailability createComponent() {
+			return new VAvailability(false);
+		}
 
-        @Override
-        public VAvailability createComponent(PropertyList properties) {
-            return new VAvailability(properties);
-        }
+		@Override
+		public VAvailability createComponent(PropertyList properties) {
+			return new VAvailability(properties);
+		}
 
-        @Override
-        public VAvailability createComponent(PropertyList properties, ComponentList subComponents) {
-            throw new UnsupportedOperationException(String.format("%s does not support sub-components", VAVAILABILITY));
-        }
-    }
+		@Override
+		public VAvailability createComponent(PropertyList properties, ComponentList subComponents) {
+			throw new UnsupportedOperationException(String.format("%s does not support sub-components", VAVAILABILITY));
+		}
+	}
 }
