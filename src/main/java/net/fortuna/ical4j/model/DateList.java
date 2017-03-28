@@ -56,6 +56,7 @@ public class DateList implements List<Date>, Serializable {
     private final List<Date> dates;
 
     private TimeZone timeZone;
+    private DateTime datetime;
     
     private boolean utc;
 
@@ -99,6 +100,7 @@ public class DateList implements List<Date>, Serializable {
         }
         this.timeZone = timezone;
         dates = new ArrayList<Date>();
+        this.datetime = new DateTime();
     }
 
     /**
