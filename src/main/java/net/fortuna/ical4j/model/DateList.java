@@ -192,18 +192,18 @@ public class DateList implements List<Date>, Serializable {
      * @see List#add(java.lang.Object)
      */
     public final boolean add(final Date date) {
+    	DateTime datetime = new DateTime(date);
         if (date instanceof DateTime) {
             if (isUtc()) {
-                ((DateTime) date).setUtc(true);
+                datetime.setUtc(true);
             }
             else {
-                ((DateTime) date).setTimeZone(getTimeZone());
+                datetime.setTimeZone(getTimeZone());
             }
         }
         else if (!Value.DATE.equals(getType())) {
-            final DateTime dateTime = new DateTime(date);
-            dateTime.setTimeZone(getTimeZone());
-            return dates.add(dateTime);
+            datetime.setTimeZone(getTimeZone());
+            return dates.add(datetime);
         }
         return dates.add(date);
     }
