@@ -575,14 +575,15 @@ public class Recur implements Serializable {
                                    final Date periodEnd, final Value value,
                                    final int maxCount) {
 
-        final DateList dates = new DateList(value);
-        if (seed instanceof DateTime) {
-            if (((DateTime) seed).isUtc()) {
-                dates.setUtc(true);
+       // final DateList dates = new DateList(value);
+    	DateTime datetime = new DateTime(seed);
+    
+            if (datetime.isUtc()) {
+            	datetime.setUtc(true);
             } else {
-                dates.setTimeZone(((DateTime) seed).getTimeZone());
+            	datetime.setTimeZone(((DateTime) seed).getTimeZone());
             }
-        }
+        
         final Calendar cal = getCalendarInstance(seed, true);
 
         // optimize the start time for selecting candidates
@@ -595,70 +596,71 @@ public class Recur implements Serializable {
             }
         }
 
-        HashSet<Date> invalidCandidates = new HashSet<Date>();
-        int noCandidateIncrementCount = 0;
-        Date candidate = null;
-        while ((maxCount < 0) || (dates.size() < maxCount)) {
-            final Date candidateSeed = Dates.getInstance(cal.getTime(), value);
-
-            if (getUntil() != null && candidate != null
-                    && candidate.after(getUntil())) {
-
-                break;
-            }
-            if (periodEnd != null && candidate != null
-                    && candidate.after(periodEnd)) {
-
-                break;
-            }
-            if (getCount() >= 1
-                    && (dates.size() + invalidCandidates.size()) >= getCount()) {
-
-                break;
-            }
-
-//            if (Value.DATE_TIME.equals(value)) {
-            if (candidateSeed instanceof DateTime) {
-                if (dates.isUtc()) {
-                    ((DateTime) candidateSeed).setUtc(true);
-                } else {
-                    ((DateTime) candidateSeed).setTimeZone(dates.getTimeZone());
-                }
-            }
-
-            final DateList candidates = getCandidates(candidateSeed, value);
-            if (!candidates.isEmpty()) {
-                noCandidateIncrementCount = 0;
-                // sort candidates for identifying when UNTIL date is exceeded..
-                Collections.sort(candidates);
-                for (Date candidate1 : candidates) {
-                    candidate = candidate1;
-                    // don't count candidates that occur before the seed date..
-                    if (!candidate.before(seed)) {
-                        // candidates exclusive of periodEnd..
-                        if (candidate.before(periodStart)
-                                || !candidate.before(periodEnd)) {
-                            invalidCandidates.add(candidate);
-                        } else if (getCount() >= 1
-                                && (dates.size() + invalidCandidates.size()) >= getCount()) {
-                            break;
-                        } else if (!(getUntil() != null
-                                && candidate.after(getUntil()))) {
-                            dates.add(candidate);
-                        }
-                    }
-                }
-            } else {
-                noCandidateIncrementCount++;
-                if ((maxIncrementCount > 0) && (noCandidateIncrementCount > maxIncrementCount)) {
-                    break;
-                }
-            }
-            increment(cal);
-        }
-        // sort final list..
-        Collections.sort(dates);
-        return dates;
+//        HashSet<Date> invalidCandidates = new HashSet<Date>();
+//        int noCandidateIncrementCount = 0;
+//        Date candidate = null;
+//        while ((maxCount < 0) || (dates.size() < maxCount)) {
+//            final Date candidateSeed = Dates.getInstance(cal.getTime(), value);
+//
+//            if (getUntil() != null && candidate != null
+//                    && candidate.after(getUntil())) {
+//
+//                break;
+//            }
+//            if (periodEnd != null && candidate != null
+//                    && candidate.after(periodEnd)) {
+//
+//                break;
+//            }
+//            if (getCount() >= 1
+//                    && (dates.size() + invalidCandidates.size()) >= getCount()) {
+//
+//                break;
+//            }
+//
+//           if (Value.DATE_TIME.equals(value)) {
+//            if (candidateSeed instanceof DateTime) {
+//                if (dates.isUtc()) {
+//                    ((DateTime) candidateSeed).setUtc(true);
+//                } else {
+//                    ((DateTime) candidateSeed).setTimeZone(dates.getTimeZone());
+//                }
+//            }
+//
+//            final DateList candidates = getCandidates(candidateSeed, value);
+//            if (!candidates.isEmpty()) {
+//                noCandidateIncrementCount = 0;
+//                // sort candidates for identifying when UNTIL date is exceeded..
+//                Collections.sort(candidates);
+//                for (Date candidate1 : candidates) {
+//                    candidate = candidate1;
+//                    // don't count candidates that occur before the seed date..
+//                    if (!candidate.before(seed)) {
+//                        // candidates exclusive of periodEnd..
+//                        if (candidate.before(periodStart)
+//                                || !candidate.before(periodEnd)) {
+//                            invalidCandidates.add(candidate);
+//                        } else if (getCount() >= 1
+//                                && (dates.size() + invalidCandidates.size()) >= getCount()) {
+//                            break;
+//                        } else if (!(getUntil() != null
+//                                && candidate.after(getUntil()))) {
+//                            dates.add(candidate);
+//                        }
+//                    }
+//                }
+//            } else {
+//                noCandidateIncrementCount++;
+//                if ((maxIncrementCount > 0) && (noCandidateIncrementCount > maxIncrementCount)) {
+//                    break;
+//                }
+//            }
+//            increment(cal);
+//        }
+//        // sort final list..
+//        Collections.sort(dates);
+//        return dates;
+        return null;
     }
 
     /**

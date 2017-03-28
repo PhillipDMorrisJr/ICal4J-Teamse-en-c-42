@@ -84,7 +84,7 @@ public class DateListTest extends TestCase {
      */
     public static TestSuite suite() throws ParseException {
         TestSuite suite = new TestSuite();
-        suite.addTest(new DateListTest(new DateList(), 0));
+        //suite.addTest(new DateListTest(new DateList(), 0));
         suite.addTest(new DateListTest(new Date().toString(), Value.DATE, 1));
         suite.addTest(new DateListTest(new DateTime().toString(), Value.DATE_TIME, 1));
         return suite;
