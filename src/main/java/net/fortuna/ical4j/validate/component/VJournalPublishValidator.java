@@ -1,6 +1,7 @@
 package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VJournal;
 import net.fortuna.ical4j.validate.PropertyValidator;
 import net.fortuna.ical4j.validate.ValidationException;
@@ -77,6 +78,11 @@ public class VJournalPublishValidator implements Validator<VJournal> {
             }
         });
 
-        PropertyValidator.getInstance().assertNone(Property.ATTENDEE, target.getProperties());
+        try {
+			PropertyValidator.getInstance().assertNone(Property.ATTENDEE, target.getProperties());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new ValidationException();
+		}
     }
 }

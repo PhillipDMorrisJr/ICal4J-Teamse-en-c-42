@@ -171,13 +171,18 @@ public class TimeZoneTest extends TestCase {
      * @param vtimezoneDef
      * @param String       zuluStr
      * @param String       expectedLocalStr
+     * @throws PropertyNotFoundException 
      */
     public TimeZoneTest(String testMethod, String vtimezoneDef, String zuluDateTimeStr,
                         String expectedLocalDateTimeStr) throws Exception {
         super(testMethod);
         net.fortuna.ical4j.model.Calendar cal = new CalendarBuilder().build(new StringReader(vtimezoneDef));
         VTimeZone vtz = (VTimeZone) cal.getComponent(VTimeZone.VTIMEZONE);
-        this.timezone = new TimeZone(vtz);
+       try {
+    	   this.timezone = new TimeZone(vtz);
+       } catch(PropertyNotFoundException e) {
+    	   this.timezone = (TimeZone) TimeZone.getDefault();
+       }
         this.zuluDateTimeStr = zuluDateTimeStr;
         this.expectedLocalDateTimeStr = expectedLocalDateTimeStr;
     }
@@ -439,7 +444,7 @@ public class TimeZoneTest extends TestCase {
                         + "END:STANDARD\r\n"
                         + "END:VTIMEZONE\r\n"
                         + "END:VCALENDAR\r\n";
-        suite.addTest(new TimeZoneTest("testZuluToLocal", minskDefinition, "20100428T140000Z", "20100428T170000"));
+			suite.addTest(new TimeZoneTest("testZuluToLocal", minskDefinition, "20100428T140000Z", "20100428T170000"));
 
         String weirdo = "BEGIN:VCALENDAR\n"
                 + "BEGIN:VTIMEZONE\n"

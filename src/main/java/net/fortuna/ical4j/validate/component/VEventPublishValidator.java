@@ -1,6 +1,7 @@
 package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Method;
@@ -103,10 +104,20 @@ public class VEventPublishValidator implements Validator<VEvent> {
         });
 
         if (!CompatibilityHints.isHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION)) {
-            PropertyValidator.getInstance().assertNone(Property.ATTENDEE, target.getProperties());
+            try {
+				PropertyValidator.getInstance().assertNone(Property.ATTENDEE, target.getProperties());
+			} catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				throw new ValidationException();
+			}
         }
 
-        PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+        try {
+			PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new ValidationException();
+		}
 
         for (final VAlarm alarm : target.getAlarms()) {
             alarm.validate(Method.PUBLISH);

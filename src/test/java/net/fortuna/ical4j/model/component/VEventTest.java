@@ -122,7 +122,12 @@ public class VEventTest extends CalendarComponentTest {
         // create timezone property..
         VTimeZone tz = registry.getTimeZone("Australia/Melbourne").getVTimeZone();
         // create tzid parameter..
-        tzParam = new TzId(tz.getProperty(Property.TZID).getValue());
+        try {
+			tzParam = new TzId(tz.getProperty(Property.TZID).getValue());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			tzParam = null;
+		}
     }
 
     /* (non-Javadoc)
@@ -212,12 +217,17 @@ public class VEventTest extends CalendarComponentTest {
         VEvent christmas = new VEvent(new Date(cal.getTime()), "Christmas Day");
 
         // initialise as an all-day event..
-        christmas.getProperty(Property.DTSTART).getParameters().add(Value.DATE);
+        try {
+			christmas.getProperty(Property.DTSTART).getParameters().add(Value.DATE);
+		
 
         // add timezone information..
         christmas.getProperty(Property.DTSTART).getParameters().add(tzParam);
 
-        log.info(christmas.toString());
+        log.info(christmas.toString());} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public final void test3() {
@@ -230,9 +240,14 @@ public class VEventTest extends CalendarComponentTest {
         VEvent meeting = new VEvent(new DateTime(cal.getTime().getTime()), new Dur(0, 1, 0, 0), "Progress Meeting");
 
         // add timezone information..
-        meeting.getProperty(Property.DTSTART).getParameters().add(tzParam);
+        try {
+			meeting.getProperty(Property.DTSTART).getParameters().add(tzParam);
+		
+        log.info(meeting.toString());} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        log.info(meeting.toString());
     }
 
 
@@ -418,7 +433,7 @@ public class VEventTest extends CalendarComponentTest {
         }
     }
 
-    public final void testGetConsumedTime3() throws Exception {
+    public final void testGetConsumedTime3() throws Exception, PropertyNotFoundException {
         String resource = "/samples/valid/calconnect10.ics";
 
         net.fortuna.ical4j.model.Calendar calendar = loadCalendar(resource);
@@ -467,8 +482,9 @@ public class VEventTest extends CalendarComponentTest {
     /**
      * A test to confirm that the end date is calculated correctly
      * from a given start date and duration.
+     * @throws PropertyNotFoundException 
      */
-    public final void testEventEndDate() {
+    public final void testEventEndDate() throws PropertyNotFoundException {
         Calendar cal = getCalendarInstance();
         Date startDate = new Date(cal.getTime());
         log.info("Start date: " + startDate);
@@ -556,8 +572,9 @@ public class VEventTest extends CalendarComponentTest {
 
     /**
      * Unit tests for {@link VEvent#getOccurrence(Date)}.
+     * @throws PropertyNotFoundException 
      */
-    public void testGetOccurrence() throws IOException, ParseException, URISyntaxException {
+    public void testGetOccurrence() throws IOException, ParseException, URISyntaxException, PropertyNotFoundException {
         VEvent occurrence = event.getOccurrence(date);
         assertNotNull(occurrence);
         assertEquals(event.getUid(), occurrence.getUid());
@@ -678,7 +695,12 @@ public class VEventTest extends CalendarComponentTest {
         suite.addTest(new VEventTest("testCalculateRecurrenceSetNotEmpty", weekdayNineToFiveEvents, period));
 
         //testGetOccurrence..
-        suite.addTest(new VEventTest("testGetOccurrence", weekdayNineToFiveEvents, weekdayNineToFiveEvents.getStartDate().getDate()));
+        try {
+			suite.addTest(new VEventTest("testGetOccurrence", weekdayNineToFiveEvents, weekdayNineToFiveEvents.getStartDate().getDate()));
+		} catch (PropertyNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
         //testGetConsumedTime..
         suite.addTest(new VEventTest("testGetConsumedTime", weekdayNineToFiveEvents));
@@ -703,13 +725,23 @@ public class VEventTest extends CalendarComponentTest {
 //        start = (DtStart) event.getProperty(Property.DTSTART);
         start = new DtStart(new DateTime());
         start.getParameters().replace(Value.DATE_TIME);
-        event.getProperties().remove(event.getProperty(Property.DTSTART));
+        try {
+			event.getProperties().remove(event.getProperty(Property.DTSTART));
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         event.getProperties().add(start);
         suite.addTest(new VEventTest("testValidationException", event));
 
         // test 1..
         event = (VEvent) event.copy();
-        start = (DtStart) event.getProperty(Property.DTSTART);
+        try {
+			start = (DtStart) event.getProperty(Property.DTSTART);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         start.getParameters().replace(Value.DATE);
         suite.addTest(new VEventTest("testValidationException", event));
 
@@ -722,9 +754,19 @@ public class VEventTest extends CalendarComponentTest {
 
         // test 2..
         event = (VEvent) event.copy();
-        start = (DtStart) event.getProperty(Property.DTSTART);
+        try {
+			start = (DtStart) event.getProperty(Property.DTSTART);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         start.getParameters().replace(Value.DATE_TIME);
-        end = (DtEnd) event.getProperty(Property.DTEND);
+        try {
+			end = (DtEnd) event.getProperty(Property.DTEND);
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         end.getParameters().replace(Value.DATE);
         suite.addTest(new VEventTest("testValidationException", event));
 
@@ -761,17 +803,22 @@ public class VEventTest extends CalendarComponentTest {
         for (int i = 0; i < testFiles.length; i++) {
             log.info("Sample [" + testFiles[i] + "]");
             net.fortuna.ical4j.model.Calendar calendar = Calendars.load(testFiles[i]);
-            if (Method.PUBLISH.equals(calendar.getProperty(Property.METHOD))) {
-                for (Iterator it = calendar.getComponents(Component.VEVENT).iterator(); it.hasNext(); ) {
-                    VEvent event1 = (VEvent) it.next();
-                    suite.addTest(new VEventTest("testPublishValidation", event1));
-                }
-            } else if (Method.REQUEST.equals(calendar.getProperty(Property.METHOD))) {
-                for (Iterator it = calendar.getComponents(Component.VEVENT).iterator(); it.hasNext(); ) {
-                    VEvent event1 = (VEvent) it.next();
-                    suite.addTest(new VEventTest("testRequestValidation", event1));
-                }
-            }
+            try {
+				if (Method.PUBLISH.equals(calendar.getProperty(Property.METHOD))) {
+				    for (Iterator it = calendar.getComponents(Component.VEVENT).iterator(); it.hasNext(); ) {
+				        VEvent event1 = (VEvent) it.next();
+				        suite.addTest(new VEventTest("testPublishValidation", event1));
+				    }
+				} else if (Method.REQUEST.equals(calendar.getProperty(Property.METHOD))) {
+				    for (Iterator it = calendar.getComponents(Component.VEVENT).iterator(); it.hasNext(); ) {
+				        VEvent event1 = (VEvent) it.next();
+				        suite.addTest(new VEventTest("testRequestValidation", event1));
+				    }
+				}
+			} catch (PropertyNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING);

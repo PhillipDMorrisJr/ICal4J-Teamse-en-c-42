@@ -37,6 +37,8 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,15 +177,26 @@ public class CalendarsTest extends TestCase {
      * Test calendar split.
      */
     public void testSplit() throws IOException, ParserException {
-        Calendar[] split = Calendars.split(calendar);
-        assertEquals(expectedCount, split.length);
+        Calendar[] split;
+		try {
+			split = Calendars.split(calendar);
+		
+        assertEquals(expectedCount, split.length);} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
     }
 
     /**
      *
      */
     public void testGetContentType() {
-        assertEquals(expectedContentType, Calendars.getContentType(calendar, charset));
+        try {
+			assertEquals(expectedContentType, Calendars.getContentType(calendar, charset));
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
     }
 
     /**

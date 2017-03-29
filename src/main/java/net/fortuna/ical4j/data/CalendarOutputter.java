@@ -94,12 +94,7 @@ public class CalendarOutputter extends AbstractOutputter {
     public final void output(final Calendar calendar, final Writer out)
             throws IOException, ValidationException {
         if (isValidating()) {
-            try {
 				calendar.validate();
-			} catch (PropertyNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
         }
 
         final FoldingWriter writer = new FoldingWriter(out, foldLength);

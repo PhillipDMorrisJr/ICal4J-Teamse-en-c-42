@@ -34,6 +34,8 @@ package net.fortuna.ical4j.model.component;
 import net.fortuna.ical4j.model.ComponentTest;
 import net.fortuna.ical4j.model.Period;
 import net.fortuna.ical4j.model.PeriodList;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import net.fortuna.ical4j.validate.ValidationException;
@@ -74,7 +76,8 @@ public class CalendarComponentTest extends ComponentTest {
      * Test component iTIP METHOD validation.
      */
     public final void testPublishValidation() throws ValidationException {
-        component.validate(Method.PUBLISH);
+    	component.validate(Method.PUBLISH);
+    	
     }
 
     /**

@@ -2,6 +2,7 @@ package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.validate.ComponentValidator;
 import net.fortuna.ical4j.validate.PropertyValidator;
@@ -93,7 +94,12 @@ public class VEventDeclineCounterValidator implements Validator<VEvent> {
                 Property.TRANSP, Property.URL), new Closure<String>() {
             @Override
             public void execute(String input) {
-                PropertyValidator.getInstance().assertNone(input, target.getProperties());
+                try {
+					PropertyValidator.getInstance().assertNone(input, target.getProperties());
+				} catch (PropertyNotFoundException e) {
+					// TODO Auto-generated catch block
+					throw new ValidationException("Invalid target property");
+				}
             }
         });
 

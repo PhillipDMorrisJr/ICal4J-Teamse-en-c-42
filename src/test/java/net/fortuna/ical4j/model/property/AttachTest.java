@@ -57,95 +57,104 @@ import java.net.URISyntaxException;
  */
 public class AttachTest extends TestCase {
 
-    private Logger log = LoggerFactory.getLogger(AttachTest.class);
+	private Logger log = LoggerFactory.getLogger(AttachTest.class);
 
-    private Attach attach;
+	private Attach attach;
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        FileInputStream fin = new FileInputStream("etc/artwork/logo.png");
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        for (int i = fin.read(); i >= 0; ) {
-            bout.write(i);
-            i = fin.read();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		FileInputStream fin = new FileInputStream("etc/artwork/logo.png");
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		for (int i = fin.read(); i >= 0;) {
+			bout.write(i);
+			i = fin.read();
+		}
 
-        ParameterList params = new ParameterList();
-        params.add(Encoding.BASE64);
-        params.add(Value.BINARY);
+		ParameterList params = new ParameterList();
+		params.add(Encoding.BASE64);
+		params.add(Value.BINARY);
 
-//        Attach attach = new Attach(params, Base64.encodeBytes(bout.toByteArray(), Base64.DONT_BREAK_LINES));
-        attach = new Attach(params, bout.toByteArray());
-    }
+		// Attach attach = new Attach(params,
+		// Base64.encodeBytes(bout.toByteArray(), Base64.DONT_BREAK_LINES));
+		attach = new Attach(params, bout.toByteArray());
+	}
 
-    /*
-     * Class under test for void Attach(ParameterList, String)
-     */
-    public void testAttachParameterListString() throws IOException, URISyntaxException, ValidationException, ParserException {
+	/*
+	 * Class under test for void Attach(ParameterList, String)
+	 */
+	public void testAttachParameterListString()
+			throws IOException, URISyntaxException, ValidationException, ParserException {
 
-        //log.info(attach);
+		// log.info(attach);
 
-        // create event start date..
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER);
-        cal.set(java.util.Calendar.DAY_OF_MONTH, 25);
+		// create event start date..
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		cal.set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER);
+		cal.set(java.util.Calendar.DAY_OF_MONTH, 25);
 
-        DtStart start = new DtStart(new Date(cal.getTime().getTime()));
-        start.getParameters().replace(Value.DATE);
+		DtStart start = new DtStart(new Date(cal.getTime().getTime()));
+		start.getParameters().replace(Value.DATE);
 
-        Summary summary = new Summary("Christmas Day; \n this is a, test\\");
+		Summary summary = new Summary("Christmas Day; \n this is a, test\\");
 
-        VEvent christmas = new VEvent();
-        christmas.getProperties().add(start);
-        christmas.getProperties().add(summary);
-        christmas.getProperties().add(attach);
-        christmas.getProperties().add(new Uid("000001@modularity.net.au"));
+		VEvent christmas = new VEvent();
+		christmas.getProperties().add(start);
+		christmas.getProperties().add(summary);
+		christmas.getProperties().add(attach);
+		christmas.getProperties().add(new Uid("000001@modularity.net.au"));
 
-        Calendar calendar = new Calendar();
-        calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
-        calendar.getProperties().add(Version.VERSION_2_0);
-        calendar.getProperties().add(CalScale.GREGORIAN);
-        calendar.getComponents().add(christmas);
+		Calendar calendar = new Calendar();
+		calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+		calendar.getProperties().add(Version.VERSION_2_0);
+		calendar.getProperties().add(CalScale.GREGORIAN);
+		calendar.getComponents().add(christmas);
 
-        StringWriter sw = new StringWriter();
-        CalendarOutputter out = new CalendarOutputter();
-        out.output(calendar, sw);
+		StringWriter sw = new StringWriter();
+		CalendarOutputter out = new CalendarOutputter();
+		out.output(calendar, sw);
 
-        CalendarBuilder builder = new CalendarBuilder();
-        Calendar cout = builder.build(new StringReader(sw.toString()));
+		CalendarBuilder builder = new CalendarBuilder();
+		Calendar cout = builder.build(new StringReader(sw.toString()));
 
-        VEvent eout = (VEvent) cout.getComponent(Component.VEVENT);
+		VEvent eout = (VEvent) cout.getComponent(Component.VEVENT);
 
-        Attach aout = (Attach) eout.getProperty(Property.ATTACH);
-        assertNotNull(aout);
-        assertEquals(attach, aout);
+		Attach aout;
+		try {
+			aout = (Attach) eout.getProperty(Property.ATTACH);
 
-        log.info(sw.toString());
-    }
+			assertNotNull(aout);
+			assertEquals(attach, aout);
 
-    /**
-     * Unit testing of serialization.
-     */
-    public void testSerialization() throws IOException, ClassNotFoundException,
-            URISyntaxException {
+			log.info(sw.toString());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
+	}
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bout);
-        out.writeObject(attach);
+	/**
+	 * Unit testing of serialization.
+	 */
+	public void testSerialization() throws IOException, ClassNotFoundException, URISyntaxException {
 
-        ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream(bout.toByteArray()));
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(bout);
+		out.writeObject(attach);
 
-        Attach clone = (Attach) in.readObject();
+		ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bout.toByteArray()));
 
-        assertNotNull(clone);
-        assertEquals(attach, clone);
+		Attach clone = (Attach) in.readObject();
 
-        // set a bogus value to trigger logging..
-        clone.getParameters().replace(new Encoding("BOGUS"));
-        clone.setValue("");
-    }
+		assertNotNull(clone);
+		assertEquals(attach, clone);
+
+		// set a bogus value to trigger logging..
+		clone.getParameters().replace(new Encoding("BOGUS"));
+		clone.setValue("");
+	}
 }

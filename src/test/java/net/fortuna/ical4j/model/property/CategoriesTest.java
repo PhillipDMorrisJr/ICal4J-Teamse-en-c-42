@@ -50,119 +50,118 @@ import java.io.StringWriter;
  * Created on 17/03/2007
  *
  * Unit testing for {@link Categories}.
+ * 
  * @author Ben Fortuna
  */
 public class CategoriesTest extends PropertyTest {
 
-    private Categories value;
-    private int expectedCategories;
+	private Categories value;
+	private int expectedCategories;
 
+	/**
+	 * @param property
+	 * @param expectedValue
+	 */
+	public CategoriesTest(Categories property, String expectedValue) {
+		super(property, expectedValue);
+	}
 
-    /**
-     * @param property
-     * @param expectedValue
-     */
-    public CategoriesTest(Categories property, String expectedValue) {
-        super(property, expectedValue);
-    }
+	/**
+	 * @param testMethod
+	 * @param property
+	 */
+	public CategoriesTest(String testMethod, Categories property) {
+		super(testMethod, property);
+	}
 
-    /**
-     * @param testMethod
-     * @param property
-     */
-    public CategoriesTest(String testMethod, Categories property) {
-        super(testMethod, property);
-    }
+	/**
+	 * @param testMethod
+	 * @param property
+	 */
+	public CategoriesTest(String testMethod, Categories property, int expectedCategories) {
+		super(testMethod, property);
+		this.value = property;
+		this.expectedCategories = expectedCategories;
+	}
 
-    /**
-     * @param testMethod
-     * @param property
-     */
-    public CategoriesTest(String testMethod, Categories property, int expectedCategories) {
-        super(testMethod, property);
-        this.value = property;
-        this.expectedCategories = expectedCategories;
-    }
+	/**
+	 * Test escaping of commas in categories.
+	 */
+	public void testCommaEscaping() throws ValidationException, IOException, ParserException {
+		Categories cat1 = new Categories("test1");
+		Categories cat2 = new Categories("test2");
+		Categories cat3 = new Categories("test1,test2,test 1\\,2\\,3");
 
-    /**
-     * Test escaping of commas in categories.
-     */
-    public void testCommaEscaping() throws ValidationException, IOException,
-            ParserException {
-        Categories cat1 = new Categories("test1");
-        Categories cat2 = new Categories("test2");
-        Categories cat3 = new Categories("test1,test2,test 1\\,2\\,3");
+		VEvent event = new VEvent();
+		event.getProperties().add(cat1);
+		event.getProperties().add(cat2);
+		event.getProperties().add(cat3);
 
-        VEvent event = new VEvent();
-        event.getProperties().add(cat1);
-        event.getProperties().add(cat2);
-        event.getProperties().add(cat3);
+		Calendar calendar = new Calendar();
+		calendar.getComponents().add(event);
 
-        Calendar calendar = new Calendar();
-        calendar.getComponents().add(event);
+		StringWriter tempOut = new StringWriter();
+		CalendarOutputter cout = new CalendarOutputter(false);
+		cout.output(calendar, tempOut);
 
-        StringWriter tempOut = new StringWriter();
-        CalendarOutputter cout = new CalendarOutputter(false);
-        cout.output(calendar, tempOut);
+		CalendarBuilder builder = new CalendarBuilder();
+		calendar = builder.build(new StringReader(tempOut.getBuffer().toString()));
 
-        CalendarBuilder builder = new CalendarBuilder();
-        calendar = builder.build(new StringReader(tempOut.getBuffer()
-                .toString()));
+		PropertyList categories = calendar.getComponent(Component.VEVENT).getProperties(Property.CATEGORIES);
 
-        PropertyList categories = calendar.getComponent(Component.VEVENT)
-                .getProperties(Property.CATEGORIES);
+		assertEquals(cat1, categories.get(0));
+		assertEquals(cat2, categories.get(1));
+		assertEquals(cat3, categories.get(2));
+		assertEquals(3, cat3.getCategories().size());
+	}
 
-        assertEquals(cat1, categories.get(0));
-        assertEquals(cat2, categories.get(1));
-        assertEquals(cat3, categories.get(2));
-        assertEquals(3, cat3.getCategories().size());
-    }
+	/**
+	 * Test escaping of commas in categories.
+	 */
+	public void testCommaEscapingCount() throws ValidationException, IOException, ParserException {
 
-    /**
-     * Test escaping of commas in categories.
-     */
-    public void testCommaEscapingCount() throws ValidationException, IOException,
-            ParserException {
+		assertEquals(expectedCategories, value.getCategories().size());
+	}
 
-        assertEquals(expectedCategories, value.getCategories().size());
-    }
+	/**
+	 * @return
+	 * @throws ValidationException
+	 * @throws IOException
+	 * @throws ParserException
+	 */
+	public static TestSuite suite() throws IOException, ValidationException, ParserException {
+		TestSuite suite = new TestSuite();
+		String list = "one,two,three";
+		Categories categories = new Categories(list);
+		suite.addTest(new CategoriesTest(categories, list));
 
-    /**
-     * @return
-     * @throws ValidationException
-     * @throws IOException
-     * @throws ParserException
-     */
-    public static TestSuite suite() throws IOException, ValidationException,
-            ParserException {
-        TestSuite suite = new TestSuite();
-        String list = "one,two,three";
-        Categories categories = new Categories(list);
-        suite.addTest(new CategoriesTest(categories, list));
+		// Test escaping of categories string representation..
+		Calendar calendar = Calendars.load(CategoriesTest.class.getResource("/samples/valid/categories.ics"));
+		Categories orig;
+		try {
+			orig = (Categories) calendar.getComponent(Component.VEVENT).getProperty(Property.CATEGORIES);
 
-        // Test escaping of categories string representation..
-        Calendar calendar = Calendars.load(CategoriesTest.class.getResource("/samples/valid/categories.ics"));
-        Categories orig = (Categories) calendar.getComponent(Component.VEVENT)
-                .getProperty(Property.CATEGORIES);
+			StringWriter tempOut = new StringWriter();
+			CalendarOutputter cout = new CalendarOutputter();
+			cout.output(calendar, tempOut);
 
-        StringWriter tempOut = new StringWriter();
-        CalendarOutputter cout = new CalendarOutputter();
-        cout.output(calendar, tempOut);
+			CalendarBuilder builder = new CalendarBuilder();
+			calendar = builder.build(new StringReader(tempOut.getBuffer().toString()));
 
-        CalendarBuilder builder = new CalendarBuilder();
-        calendar = builder.build(new StringReader(tempOut.getBuffer()
-                .toString()));
+			Categories copy = (Categories) calendar.getComponent(Component.VEVENT).getProperty(Property.CATEGORIES);
+			assertEquals(orig, copy);
+			suite.addTest(new CategoriesTest(copy, orig.getValue()));
 
-        Categories copy = (Categories) calendar.getComponent(Component.VEVENT)
-                .getProperty(Property.CATEGORIES);
-        assertEquals(orig, copy);
-        suite.addTest(new CategoriesTest(copy, orig.getValue()));
+			// other tests..
+			suite.addTest(new CategoriesTest("testCommaEscaping", null));
+			suite.addTest(new CategoriesTest("testCommaEscapingCount", new Categories("a\\,b"), 1));
+			suite.addTest(new CategoriesTest("testCommaEscapingCount", new Categories("a,b\\,c"), 2));
 
-        // other tests..
-        suite.addTest(new CategoriesTest("testCommaEscaping", null));
-        suite.addTest(new CategoriesTest("testCommaEscapingCount", new Categories("a\\,b"), 1));
-        suite.addTest(new CategoriesTest("testCommaEscapingCount", new Categories("a,b\\,c"), 2));
-
-        return suite;
-    }
+			return suite;
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
+		return suite;
+	}
 }

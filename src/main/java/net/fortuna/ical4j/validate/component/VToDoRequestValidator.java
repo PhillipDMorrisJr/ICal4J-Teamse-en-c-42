@@ -1,6 +1,7 @@
 package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Method;
@@ -94,7 +95,12 @@ public class VToDoRequestValidator implements Validator<VToDo> {
             }
         });
 
-        PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+        try {
+			PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new ValidationException();
+		}
 
         for (final VAlarm alarm : target.getAlarms()) {
             alarm.validate(Method.REQUEST);

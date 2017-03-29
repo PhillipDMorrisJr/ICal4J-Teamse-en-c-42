@@ -2,6 +2,7 @@ package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.validate.ComponentValidator;
 import net.fortuna.ical4j.validate.PropertyValidator;
@@ -95,7 +96,12 @@ public class VEventCancelValidator implements Validator<VEvent> {
             }
         });
 
-        PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+        try {
+			PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, target.getProperties());
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			throw new ValidationException();
+		}
 
         ComponentValidator.assertNone(Component.VALARM, target.getAlarms());
     }

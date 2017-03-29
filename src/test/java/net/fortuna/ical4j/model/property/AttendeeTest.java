@@ -36,6 +36,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.util.Calendars;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import org.slf4j.Logger;
@@ -103,7 +104,13 @@ public class AttendeeTest extends TestCase {
         CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true);
         Calendar calendar = Calendars.load(getClass().getResource("/samples/invalid/groupwise.ics"));
         
-        Attendee attendee = (Attendee) calendar.getComponent(Component.VEVENT).getProperty(Property.ATTENDEE);
-        assertNotNull(attendee.getCalAddress());
+        Attendee attendee;
+		try {
+			attendee = (Attendee) calendar.getComponent(Component.VEVENT).getProperty(Property.ATTENDEE);
+		
+        assertNotNull(attendee.getCalAddress());} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
     }
 }

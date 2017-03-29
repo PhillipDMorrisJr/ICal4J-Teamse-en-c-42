@@ -35,6 +35,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import net.fortuna.ical4j.validate.ValidationException;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;

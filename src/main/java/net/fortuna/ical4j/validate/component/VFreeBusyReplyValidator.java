@@ -1,6 +1,7 @@
 package net.fortuna.ical4j.validate.component;
 
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.VFreeBusy;
 import net.fortuna.ical4j.validate.PropertyValidator;
 import net.fortuna.ical4j.validate.ValidationException;
@@ -66,7 +67,12 @@ public class VFreeBusyReplyValidator implements Validator<VFreeBusy> {
         CollectionUtils.forAllDo(Arrays.asList(Property.DURATION, Property.SEQUENCE), new Closure<String>() {
             @Override
             public void execute(String input) {
-                PropertyValidator.getInstance().assertNone(input, target.getProperties());
+                try {
+					PropertyValidator.getInstance().assertNone(input, target.getProperties());
+				} catch (PropertyNotFoundException e) {
+					// TODO Auto-generated catch block
+					throw new ValidationException();
+				}
             }
         });
     }

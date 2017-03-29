@@ -60,14 +60,9 @@ public class PeriodRule<T extends Component> implements Rule<T> {
      * {@inheritDoc}
      */
     public final boolean match(final Component component) {
-        
-        try {
+
         final PeriodList recurrenceSet = component.calculateRecurrenceSet(period);
         return (!recurrenceSet.isEmpty());
-        }
-        catch (PropertyNotFoundException e) {
-        	e.printStackTrace();
-            return false;
-        }
+
     }
 }

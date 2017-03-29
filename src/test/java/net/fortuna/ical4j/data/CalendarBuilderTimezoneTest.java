@@ -38,6 +38,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.DtStart;
@@ -46,64 +47,64 @@ import net.fortuna.ical4j.util.CompatibilityHints;
 /**
  * $Id: CalendarBuilderTimezoneTest.java [Jul 1, 2008]
  *
- * Test case for CalendarBuilder and handling of icalendar streams
- * where VTIMZONES are included after other components.
+ * Test case for CalendarBuilder and handling of icalendar streams where
+ * VTIMZONES are included after other components.
  *
  * @author randy
  */
 public class CalendarBuilderTimezoneTest extends TestCase {
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected final void setUp() throws Exception {
-        CompatibilityHints.setHintEnabled(
-                CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
-        CompatibilityHints.setHintEnabled(
-                CompatibilityHints.KEY_NOTES_COMPATIBILITY, true);
-        CompatibilityHints.setHintEnabled(
-                CompatibilityHints.KEY_RELAXED_VALIDATION, true);
-    }
-    
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#tearDown()
-     */
-    protected final void tearDown() throws Exception {
-        CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING);
-        CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_NOTES_COMPATIBILITY);
-        CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION);
-    }
-    
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected final void setUp() throws Exception {
+		CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
+		CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_NOTES_COMPATIBILITY, true);
+		CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION, true);
+	}
 
-   /**
-     * Test that VTIMEZONES that are included after VEVENT 
-     * are correctly handled and that dates defined before the
-     * VTIMEZONE are parsed properly.
-     */
-    public void testVTimeZoneAfterVEvent() throws Exception {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected final void tearDown() throws Exception {
+		CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING);
+		CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_NOTES_COMPATIBILITY);
+		CompatibilityHints.clearHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION);
+	}
 
-        // Evolution includes VTIMEZONE defs after VEVENT defs,
-        // which is allowed by RFC-2445
-        InputStream in = getClass().getResourceAsStream(
-                "/samples/valid/evolution.ics");
-        CalendarBuilder builder = new CalendarBuilder();
-        Calendar calendar = null;
+	/**
+	 * Test that VTIMEZONES that are included after VEVENT are correctly handled
+	 * and that dates defined before the VTIMEZONE are parsed properly.
+	 */
+	public void testVTimeZoneAfterVEvent() throws Exception {
 
-        calendar = builder.build(in);
-        assertNotNull("Calendar is null", calendar);
-        ComponentList<CalendarComponent> comps = calendar.getComponents(Component.VEVENT);
-        assertTrue("VEVENT not found", comps.size() == 1);
-        VEvent vevent = (VEvent) comps.get(0);
+		// Evolution includes VTIMEZONE defs after VEVENT defs,
+		// which is allowed by RFC-2445
+		try {
+			InputStream in = getClass().getResourceAsStream("/samples/valid/evolution.ics");
+			CalendarBuilder builder = new CalendarBuilder();
+			Calendar calendar = null;
 
-        DtStart dtstart = vevent.getStartDate();
-        DateTime dateTime = (DateTime) dtstart.getDate();
+			calendar = builder.build(in);
+			assertNotNull("Calendar is null", calendar);
+			ComponentList<CalendarComponent> comps = calendar.getComponents(Component.VEVENT);
+			assertTrue("VEVENT not found", comps.size() == 1);
+			VEvent vevent = (VEvent) comps.get(0);
 
-        assertEquals("date value not correct", "20080624T130000", dtstart
-                .getValue());
-        assertNotNull("timezone not present", dateTime.getTimeZone());
-        assertEquals("timezone not correct",
-                "/softwarestudio.org/Tzfile/America/Chicago", dateTime
-                        .getTimeZone().getID());
+			DtStart dtstart = vevent.getStartDate();
+			DateTime dateTime = (DateTime) dtstart.getDate();
 
-    }
+			assertEquals("date value not correct", "20080624T130000", dtstart.getValue());
+			assertNotNull("timezone not present", dateTime.getTimeZone());
+			assertEquals("timezone not correct", "/softwarestudio.org/Tzfile/America/Chicago",
+					dateTime.getTimeZone().getID());
+
+		} catch (PropertyNotFoundException e) {
+			fail();
+		}
+	}
 }

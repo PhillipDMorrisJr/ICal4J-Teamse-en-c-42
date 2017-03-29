@@ -52,42 +52,47 @@ import java.util.List;
  */
 public class IndexedComponentListTest extends TestCase {
 
-    private static Logger LOG = LoggerFactory.getLogger(IndexedComponentListTest.class);
+	private static Logger LOG = LoggerFactory.getLogger(IndexedComponentListTest.class);
 
-    private Calendar calendar;
+	private Calendar calendar;
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        CalendarBuilder builder = new CalendarBuilder();
-        calendar = builder.build(getClass().getResourceAsStream("/samples/valid/Australian_TV_Melbourne.ics"));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		CalendarBuilder builder = new CalendarBuilder();
+		calendar = builder.build(getClass().getResourceAsStream("/samples/valid/Australian_TV_Melbourne.ics"));
+	}
 
-    /**
-     * Indexing with IndexedComponentList.
-     */
-    public void testIndexing() {
-        long start = System.currentTimeMillis();
-        IndexedComponentList<CalendarComponent> list = new IndexedComponentList<CalendarComponent>(calendar.getComponents(),
-                Property.LOCATION);
-        LOG.info(list.getComponents("ABC").size() + " programs on ABC."
-                + " (" + (System.currentTimeMillis() - start) + "ms)");
-    }
+	/**
+	 * Indexing with IndexedComponentList.
+	 */
+	public void testIndexing() {
+		long start = System.currentTimeMillis();
+		IndexedComponentList<CalendarComponent> list = new IndexedComponentList<CalendarComponent>(
+				calendar.getComponents(), Property.LOCATION);
+		LOG.info(list.getComponents("ABC").size() + " programs on ABC." + " (" + (System.currentTimeMillis() - start)
+				+ "ms)");
+	}
 
-    /**
-     * Perform manual indexing.
-     */
-    public void testManualIndexing() {
-        long start = System.currentTimeMillis();
-        List<Component> list = new ArrayList<Component>();
-        for (Component c : calendar.getComponents()) {
-            if (c.getProperty(Property.LOCATION) != null
-                    && "ABC".equals(c.getProperty(Property.LOCATION).getValue())) {
-                list.add(c);
-            }
-        }
-        LOG.info(list.size() + " programs on ABC."
-                + " (" + (System.currentTimeMillis() - start) + "ms)");
-    }
+	/**
+	 * Perform manual indexing.
+	 */
+	public void testManualIndexing() {
+		long start = System.currentTimeMillis();
+		List<Component> list = new ArrayList<Component>();
+		for (Component c : calendar.getComponents()) {
+			try {
+
+				if ("ABC".equals(c.getProperty(Property.LOCATION).getValue())) {
+					list.add(c);
+				}
+			} catch (PropertyNotFoundException e) {
+				
+			}
+		}
+		LOG.info(list.size() + " programs on ABC." + " (" + (System.currentTimeMillis() - start) + "ms)");
+	}
 }

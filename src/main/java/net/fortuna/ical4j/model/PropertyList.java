@@ -116,7 +116,7 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 				property = currentProperty;
 			}
 		}
-		if (property == null) {
+		if (property != null) {
 			return property;
 		} else {
 			throw new PropertyNotFoundException("Property was not found");

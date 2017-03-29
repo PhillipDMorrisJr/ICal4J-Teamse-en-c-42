@@ -38,6 +38,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyNotFoundException;
 import net.fortuna.ical4j.model.PropertyTest;
 import net.fortuna.ical4j.util.Calendars;
 
@@ -47,11 +48,12 @@ import net.fortuna.ical4j.util.Calendars;
  * Created on 20/02/2006
  *
  * Unit tests for Summary property.
+ * 
  * @author Ben Fortuna
  */
 public class SummaryTest extends PropertyTest {
 
-    /**
+	/**
 	 * @param property
 	 * @param expectedValue
 	 */
@@ -66,22 +68,30 @@ public class SummaryTest extends PropertyTest {
 	public SummaryTest(String testMethod, Summary property) {
 		super(testMethod, property);
 	}
-    
-    /**
-     * @return
-     * @throws ParserException 
-     * @throws IOException 
-     */
-    public static TestSuite suite() throws IOException, ParserException {
-    	TestSuite suite = new TestSuite();
-    	// Test correct parsing of quoted text..
-        Calendar calendar = Calendars.load(SummaryTest.class.getResource("/samples/valid/mansour.ics"));
-        Component event = calendar.getComponent(Component.VEVENT);
-        Summary summary = (Summary) event.getProperty(Property.SUMMARY);
-        suite.addTest(new SummaryTest(summary, "A colon with spaces on either side : like that"));
-        
-        suite.addTest(new SummaryTest("testValidation", summary));
-        suite.addTest(new SummaryTest("testEquals", summary));
-    	return suite;
-    }
+
+	/**
+	 * @return
+	 * @throws ParserException
+	 * @throws IOException
+	 */
+	public static TestSuite suite() throws IOException, ParserException {
+		TestSuite suite = new TestSuite();
+		// Test correct parsing of quoted text..
+		Calendar calendar = Calendars.load(SummaryTest.class.getResource("/samples/valid/mansour.ics"));
+		Component event = calendar.getComponent(Component.VEVENT);
+		Summary summary;
+		try {
+			summary = (Summary) event.getProperty(Property.SUMMARY);
+
+			suite.addTest(new SummaryTest(summary, "A colon with spaces on either side : like that"));
+
+			suite.addTest(new SummaryTest("testValidation", summary));
+			suite.addTest(new SummaryTest("testEquals", summary));
+			return suite;
+		} catch (PropertyNotFoundException e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
+		return suite;
+	}
 }

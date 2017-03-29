@@ -259,8 +259,13 @@ public class Calendar implements Serializable {
      * @throws ValidationException where the calendar is not in a valid state
      * @throws PropertyNotFoundException 
      */
-    public final void validate() throws ValidationException, PropertyNotFoundException {
-        validate(true);
+    public final void validate() throws ValidationException {
+    	try {
+    		validate(true);
+    	} catch(PropertyNotFoundException e){
+    		throw new ValidationException();
+    	}
+        
     }
 
     /**
