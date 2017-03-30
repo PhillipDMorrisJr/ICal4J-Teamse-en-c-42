@@ -33,6 +33,7 @@ package net.fortuna.ical4j.model;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.junit.Test;
 
@@ -148,8 +149,11 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testForTwoParameterPrecisionTimezoneFormattedYyyyMMdd() {
-    	this.date = new Date();
+    	this.date = new Date(1, TimeZone.getTimeZone("America/Atlanta"));
     	assertEquals("20170330", this.date.toString());
+    	assertEquals("240", this.date.getTimezoneOffset());
+    	assertEquals("240", this.date.);
+
     }
     
     /**
