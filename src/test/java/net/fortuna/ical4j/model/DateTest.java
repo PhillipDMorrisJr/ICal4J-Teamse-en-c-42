@@ -31,15 +31,15 @@
  */
 package net.fortuna.ical4j.model;
 
-import java.text.ParseException;
-import java.util.Calendar;
+//import java.text.ParseException;
+//import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import net.fortuna.ical4j.util.TimeZones;
+//import junit.framework.TestSuite;
+//import net.fortuna.ical4j.util.TimeZones;
 
 /**
  * $Id$
@@ -169,8 +169,10 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testThreeParameterTimePrecisionTimezoneFormattedYyyyMMdd() {
-    	this.date = new Date();
+    	this.date = new Date(1490877332557L, 1 , TimeZone.getTimeZone("America/New York"));
     	assertEquals("20170330", this.date.toString());
+    	assertEquals(EASTERN_STANDAR_TIME, this.date.getTimezoneOffset());
+
     }
     
     /**
