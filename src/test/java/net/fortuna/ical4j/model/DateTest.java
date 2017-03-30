@@ -150,7 +150,7 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testForTwoParameterPrecisionTimezoneFormattedYyyyMMdd() {
-    	this.date = new Date(1, TimeZone.getTimeZone("America/Atlanta"));
+    	this.date = new Date(1, TimeZone.getTimeZone("America/New York"));
     	assertEquals("20170330", this.date.toString());
     	assertEquals(EASTERN_STANDAR_TIME, this.date.getTimezoneOffset());
     }
@@ -160,7 +160,7 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testForOneParameterTimeConstructorFormattedYyyyMMdd() {
-    	this.date = new Date();
+    	this.date = new Date(1490877332557L);
     	assertEquals("20170330", this.date.toString());
     }
     
