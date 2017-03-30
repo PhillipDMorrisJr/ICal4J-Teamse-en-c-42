@@ -229,7 +229,12 @@ public class DateTest extends TestCase {
 	 */
 	@Test
 	public void testTwoarametersStringOfDateAndDatePatternFormattedYyyyMMdd() {
-		this.date = new Date();
-		assertEquals("20170330", this.date.toString());
+		try {
+			this.date = new Date("25.04.2017", "dd.MM.yy");
+		} catch (ParseException e) {
+			System.out.println("Could not format date.");
+			e.printStackTrace();
+		}
+		assertEquals("20170425", this.date.toString());
 	}
 }
