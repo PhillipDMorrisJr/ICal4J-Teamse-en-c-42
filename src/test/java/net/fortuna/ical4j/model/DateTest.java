@@ -51,6 +51,7 @@ import net.fortuna.ical4j.util.TimeZones;
  */
 public class DateTest extends TestCase {
 
+	private final int EASTERN_STANDAR_TIME = 240;
     private Date date;
 //
 //    private java.util.Date date2;
@@ -151,9 +152,7 @@ public class DateTest extends TestCase {
     public void testForTwoParameterPrecisionTimezoneFormattedYyyyMMdd() {
     	this.date = new Date(1, TimeZone.getTimeZone("America/Atlanta"));
     	assertEquals("20170330", this.date.toString());
-    	assertEquals("240", this.date.getTimezoneOffset());
-    	assertEquals("240", this.date.);
-
+    	assertEquals(EASTERN_STANDAR_TIME, this.date.getTimezoneOffset());
     }
     
     /**
