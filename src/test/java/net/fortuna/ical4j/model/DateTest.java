@@ -184,7 +184,7 @@ public class DateTest extends TestCase {
     	Calendar calendar = new GregorianCalendar();
     	this.date = new Date(calendar);
     	
-    	//calendar date matches time or calendar initialization
+    	//calendar date matches time of calendar initialization
     	assertEquals("20170330", this.date.toString());
     }
     
@@ -193,7 +193,7 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testOneParameterDateFormattedYyyyMMdd() {
-    	this.date = new Date();
+    	this.date = new Date(new Date());
     	assertEquals("20170330", this.date.toString());
     }
     
