@@ -58,23 +58,14 @@ public class ComponentListTest extends TestCase {
 		this.componentList.add(std3);
 		ComponentList<Component> testComponentList = new ComponentList<Component>();
 		testComponentList.add(std);
+		testComponentList.add(std2);
+		testComponentList.add(std3);
 		assertEquals(testComponentList, this.componentList.getComponents("STANDARD"));
 	}
 	
 	@Test
 	public void testGetComponentsWithAMultipleRecords() {
-		this.componentList = new ComponentList<Component>();		
-		Date componentDate = new Date(1000);
-		Dur componentDur = new Dur(0, 0, 0, 0);
-		Component component1 = new VEvent(componentDate, componentDur, "testDate1");
-		VEvent component2 = new VEvent();
-		Standard std = new Standard();
-		this.componentList.add(component1);
-		this.componentList.add(component2);
-		this.componentList.add(std);
-		ComponentList<Component> testComponentList = new ComponentList<Component>();
-		testComponentList.add(std);
-		assertEquals(testComponentList, this.componentList.getComponents("STANDARD"));
+
 	}
 
 }
