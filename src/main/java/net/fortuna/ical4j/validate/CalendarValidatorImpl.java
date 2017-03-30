@@ -5,6 +5,7 @@ import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.property.*;
+import net.fortuna.ical4j.model.NotFoundException;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
@@ -23,6 +24,15 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
     public CalendarValidatorImpl() {
         Collections.addAll(calendarProperties, CalScale.class, Method.class, ProdId.class, Version.class);
     }
+
+	private boolean calendarHasComponentNamed(Calendar cal, String name) {
+		try {
+			cal.getComponent(name);
+			return true;
+		} catch (NotFoundException e) {
+			return false;
+		}
+	}
 
     @Override
     public void validate(Calendar target) throws ValidationException {
@@ -69,7 +79,7 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
         // validate method..
         final Method method = (Method) target.getProperty(Property.METHOD);
         if (Method.PUBLISH.equals(method)) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
 
@@ -77,13 +87,13 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
                     ComponentValidator.assertNone(Component.VTODO, target.getComponents());
                 }
             }
-            else if (target.getComponent(Component.VFREEBUSY) != null) {
+            else if (calendarHasComponentNamed(target, Component.VFREEBUSY)) {
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTIMEZONE, target.getComponents());
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
 //                    ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                    ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
@@ -95,25 +105,25 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
 //                }
         }
         else if (Method.REQUEST.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VFREEBUSY) != null) {
+            else if (calendarHasComponentNamed(target, Component.VFREEBUSY)) {
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTIMEZONE, target.getComponents());
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
 //                  ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
             }
         }
         else if (Method.REPLY.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertOneOrLess(Component.VTIMEZONE, target.getComponents());
 
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
@@ -121,13 +131,13 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VFREEBUSY) != null) {
+            else if (calendarHasComponentNamed(target, Component.VFREEBUSY)) {
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTIMEZONE, target.getComponents());
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertOneOrLess(Component.VTIMEZONE, target.getComponents());
 
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
@@ -137,17 +147,17 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
             }
         }
         else if (Method.ADD.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
             }
-            else if (target.getComponent(Component.VJOURNAL) != null) {
+            else if (calendarHasComponentNamed(target, Component.VJOURNAL)) {
                 ComponentValidator.assertOneOrLess(Component.VTIMEZONE, target.getComponents());
 
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
@@ -156,13 +166,13 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
             }
         }
         else if (Method.CANCEL.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertOneOrLess(Component.VTIMEZONE, target.getComponents());
 
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
@@ -170,7 +180,7 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
             }
-            else if (target.getComponent(Component.VJOURNAL) != null) {
+            else if (calendarHasComponentNamed(target, Component.VJOURNAL)) {
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
@@ -178,13 +188,13 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
             }
         }
         else if (Method.REFRESH.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());
@@ -193,12 +203,12 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
             }
         }
         else if (Method.COUNTER.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertOneOrLess(Component.VTIMEZONE, target.getComponents());
 
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
@@ -207,14 +217,14 @@ public class CalendarValidatorImpl implements Validator<Calendar> {
             }
         }
         else if (Method.DECLINE_COUNTER.equals(target.getProperty(Property.METHOD))) {
-            if (target.getComponent(Component.VEVENT) != null) {
+            if (calendarHasComponentNamed(target, Component.VEVENT)) {
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
                 ComponentValidator.assertNone(Component.VJOURNAL, target.getComponents());
                 ComponentValidator.assertNone(Component.VTODO, target.getComponents());
                 ComponentValidator.assertNone(Component.VTIMEZONE, target.getComponents());
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
             }
-            else if (target.getComponent(Component.VTODO) != null) {
+            else if (calendarHasComponentNamed(target, Component.VTODO)) {
                 ComponentValidator.assertNone(Component.VALARM, target.getComponents());
                 ComponentValidator.assertNone(Component.VFREEBUSY, target.getComponents());
 //                  ComponentValidator.assertNone(Component.VEVENT, target.getComponents());

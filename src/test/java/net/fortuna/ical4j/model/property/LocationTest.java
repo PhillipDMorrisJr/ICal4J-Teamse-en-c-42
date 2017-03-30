@@ -39,6 +39,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyTest;
+import net.fortuna.ical4j.model.NotFoundException;
 import net.fortuna.ical4j.util.Calendars;
 
 /**
@@ -72,7 +73,7 @@ public class LocationTest extends PropertyTest {
      * @throws IOException
      * @throws ParserException
      */
-    public void testQuotedText() throws IOException, ParserException {
+    public void testQuotedText() throws IOException, ParserException, NotFoundException {
         Calendar calendar = Calendars.load(getClass().getResource("/samples/valid/mansour.ics"));
         Component event = calendar.getComponent(Component.VEVENT);
         assertEquals("At \"The Terrace\" Complex > Melbourne \"\\,", event.getProperty(Property.LOCATION).getValue());
@@ -83,7 +84,7 @@ public class LocationTest extends PropertyTest {
      * @throws ParserException 
      * @throws IOException 
      */
-    public static TestSuite suite() throws IOException, ParserException {
+    public static TestSuite suite() throws IOException, ParserException, NotFoundException {
     	TestSuite suite = new TestSuite();
     	//testQuotedText..
         Calendar calendar = Calendars.load(LocationTest.class.getResource("/samples/valid/mansour.ics"));

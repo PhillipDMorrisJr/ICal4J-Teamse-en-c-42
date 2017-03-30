@@ -90,6 +90,19 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+
+jacoco {
+	reportsDir = file("$buildDir/codeCoverageReports")
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+		html.destination "${buildDir}/codeCoverageReports/jacocoHtml"
+	}
+}
+
 artifacts {
     archives jar
     archives javadocJar
@@ -125,6 +138,7 @@ ext {
     sonatypePassword = project.hasProperty('sonatypePassword') ? project.getProperty('sonatypePassword') : ''
 }
 
+/*
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -167,3 +181,4 @@ uploadArchives {
         }
     }
 }
+*/

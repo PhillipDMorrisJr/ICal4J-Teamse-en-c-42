@@ -214,18 +214,20 @@ public class Calendar implements Serializable {
      * Convenience method for retrieving a list of named components.
      * @param name name of components to retrieve
      * @return a component list containing only components with the specified name
+     * @throws NotFoundException if the named component is not found
      */
-    public final <C extends CalendarComponent> ComponentList<C> getComponents(final String name) {
-        return getComponents().getComponents(name);
+    public final <C extends CalendarComponent> ComponentList<C> getComponents(final String name) throws NotFoundException {
+        return this.getComponents().getComponents(name);
     }
 
     /**
      * Convenience method for retrieving a named component.
      * @param name name of the component to retrieve
      * @return the first matching component in the component list with the specified name
+     * @throws NotFoundException if component with the given name is not found
      */
-    public final CalendarComponent getComponent(final String name) {
-        return getComponents().getComponent(name);
+    public final CalendarComponent getComponent(final String name) throws NotFoundException {
+        return this.getComponents().getComponent(name);
     }
 
     /**

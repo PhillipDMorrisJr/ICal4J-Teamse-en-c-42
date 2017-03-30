@@ -41,6 +41,7 @@ import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.NotFoundException;
 
 
 /**
@@ -48,14 +49,13 @@ import net.fortuna.ical4j.model.Component;
  */
 public class VAvailabilityTestCase extends TestCase
 {
-    public void testVAvailability() throws ParserException, IOException
+    public void testVAvailability() throws ParserException, IOException, NotFoundException
     {
         CalendarBuilder calendarBuilder = new CalendarBuilder();
         String availability = getVAvailabilityICal();
         Reader reader = new StringReader(availability);
         Calendar calendar = calendarBuilder.build(reader);
         Component availabilityComponent = calendar.getComponent(Component.VAVAILABILITY);
-        Assert.assertNotNull(availabilityComponent);
         Assert.assertFalse(((VAvailability) availabilityComponent).getAvailable().isEmpty());
         String iCalString = calendar.toString();
         Assert.assertTrue(iCalString.contains("BEGIN:AVAILABLE"));

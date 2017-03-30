@@ -91,15 +91,16 @@ public class ComponentList<T extends Component> extends ArrayList<T> implements 
     /**
      * Returns the first component of specified name.
      * @param aName name of component to return
-     * @return a component or null if no matching component found
+     * @return a component
+     * @throws NotFoundException if a component with the given name is not found
      */
-    public final T getComponent(final String aName) {
+    public final T getComponent(final String aName) throws NotFoundException {
         for (final T c : this) {
             if (c.getName().equals(aName)) {
                 return c;
             }
         }
-        return null;
+        throw new NotFoundException(aName);
     }
 
     /**

@@ -46,6 +46,7 @@ import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Organizer;
+import net.fortuna.ical4j.model.NotFoundException;
 
 /**
  * $Id$
@@ -114,7 +115,7 @@ public class FilterTest<T extends Component> extends TestCase {
      * @throws URISyntaxException 
      */
     @SuppressWarnings("unchecked")
-	public static TestSuite suite() throws FileNotFoundException, IOException, ParserException, URISyntaxException {
+	public static TestSuite suite() throws FileNotFoundException, IOException, ParserException, URISyntaxException, NotFoundException {
         Organizer organizer = new Organizer(new URI("Mailto:B@example.com"));
         Attendee a1 = new Attendee(new URI("Mailto:A@example.com"));
         Attendee a2 = new Attendee(new URI("Mailto:C@example.com"));

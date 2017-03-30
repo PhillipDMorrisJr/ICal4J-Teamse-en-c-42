@@ -36,6 +36,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.NotFoundException;
 import net.fortuna.ical4j.util.Calendars;
 import net.fortuna.ical4j.util.CompatibilityHints;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class AttendeeTest extends TestCase {
     /**
      * Test method for {@link net.fortuna.ical4j.model.property.Attendee#Attendee(java.lang.String)}.
      */
-    public void testAttendeeString() throws URISyntaxException {
+    public void testAttendeeString() throws URISyntaxException, NotFoundException {
         try {
             new Attendee("MAILTO:CET Meeting Room@university.edu");
             fail("Should throw URISyntaxException");
@@ -91,7 +92,7 @@ public class AttendeeTest extends TestCase {
         assertEquals(new URI("MAILTO:CET%20Meeting%20Room@university.edu"), attendee.getCalAddress());
     }
 
-    public void testRelaxedParsing() throws IOException, ParserException {
+    public void testRelaxedParsing() throws IOException, ParserException, NotFoundException {
         try {
             Calendars.load(getClass().getResource("/samples/invalid/groupwise.ics"));
             fail("Should throw URISyntaxException");

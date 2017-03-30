@@ -145,7 +145,7 @@ public class ComponentTest extends TestCase {
      * @return
      */
     @SuppressWarnings("serial")
-	public static TestSuite suite() throws ValidationException, ParseException, IOException, URISyntaxException, ParserException  {
+	public static TestSuite suite() throws ValidationException, ParseException, IOException, URISyntaxException, ParserException, NotFoundException  {
         TestSuite suite = new TestSuite();
         
         Component component = new Component("test") {

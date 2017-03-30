@@ -124,6 +124,14 @@ public final class Calendars {
         return new Calendar(components);
     }
     
+	private static boolean hasOnlyTimezoneDefinitions(final Calendar calendar) {
+		try {
+			return calendar.getComponents(Component.VTIMEZONE).size() == calendar.getComponents().size();
+		} catch (NotFoundException e) {
+			return false;
+		}
+	}
+
     /**
      * Splits a calendar object into distinct calendar objects for unique
      * identifers (UID).
@@ -134,11 +142,18 @@ public final class Calendars {
         // if calendar contains one component or less, or is composed entirely of timezone
         // definitions, return the original calendar unmodified..
         if (calendar.getComponents().size() <= 1
-                || calendar.getComponents(Component.VTIMEZONE).size() == calendar.getComponents().size()) {
+                || Calendars.hasOnlyTimezoneDefinitions(calendar)) {
             return new Calendar[] {calendar};
         }
         
-        final ComponentList<VTimeZone> timezoneList = calendar.getComponents(Component.VTIMEZONE);
+        ComponentList<VTimeZone> timezoneList;
+        
+        try {
+        	timezoneList = calendar.getComponents(Component.VTIMEZONE);
+        } catch (NotFoundException e) {
+        	timezoneList = null;
+        }
+        
 		final IndexedComponentList<VTimeZone> timezones = new IndexedComponentList<VTimeZone>(
         		timezoneList, Property.TZID);
         

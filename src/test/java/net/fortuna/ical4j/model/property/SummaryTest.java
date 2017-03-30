@@ -39,6 +39,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyTest;
+import net.fortuna.ical4j.model.NotFoundException;
 import net.fortuna.ical4j.util.Calendars;
 
 /**
@@ -72,7 +73,7 @@ public class SummaryTest extends PropertyTest {
      * @throws ParserException 
      * @throws IOException 
      */
-    public static TestSuite suite() throws IOException, ParserException {
+    public static TestSuite suite() throws IOException, ParserException, NotFoundException {
     	TestSuite suite = new TestSuite();
     	// Test correct parsing of quoted text..
         Calendar calendar = Calendars.load(SummaryTest.class.getResource("/samples/valid/mansour.ics"));

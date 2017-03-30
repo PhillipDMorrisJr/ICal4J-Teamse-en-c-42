@@ -118,7 +118,8 @@ public class PeriodRuleTest extends FilterTest<CalendarComponent> {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public static TestSuite suite() throws FileNotFoundException, IOException, ParserException {
+    public static TestSuite suite() throws FileNotFoundException, IOException, 
+		ParserException, NotFoundException {
         CalendarBuilder builder = new CalendarBuilder();
         Calendar calendar = builder.build(PeriodRuleTest.class.getResourceAsStream("/samples/valid/Australian_TV_Melbourne.ics"));
 

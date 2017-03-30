@@ -32,6 +32,7 @@
 package net.fortuna.ical4j.validate;
 
 import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.NotFoundException;
 
 /**
  * @author Ben
@@ -55,9 +56,12 @@ public final class ComponentValidator {
      * @throws ValidationException where the assertion fails
      */
     public static void assertNone(String componentName, ComponentList<?> components) throws ValidationException {
-        if (components.getComponent(componentName) != null) {
-            throw new ValidationException(ASSERT_NONE_MESSAGE, new Object[] {componentName});
-        }
+		try {
+			components.getComponent(componentName);
+			throw new ValidationException(ASSERT_NONE_MESSAGE, new Object[] {componentName});
+		} catch (NotFoundException c) {
+		
+		}
     }
     
     /**
