@@ -31,8 +31,9 @@
  */
 package net.fortuna.ical4j.model;
 
+import java.util.GregorianCalendar;
 //import java.text.ParseException;
-//import java.util.Calendar;
+import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.junit.Test;
@@ -180,7 +181,10 @@ public class DateTest extends TestCase {
      */
     @Test
     public void testOneParameterCalendarFormattedYyyyMMdd() {
-    	this.date = new Date();
+    	Calendar calendar = new GregorianCalendar();
+    	this.date = new Date(calendar);
+    	
+    	//calendar date matches time or calendar initialization
     	assertEquals("20170330", this.date.toString());
     }
     
