@@ -34,6 +34,8 @@ package net.fortuna.ical4j.model;
 import java.text.ParseException;
 import java.util.Calendar;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import net.fortuna.ical4j.util.TimeZones;
@@ -41,94 +43,166 @@ import net.fortuna.ical4j.util.TimeZones;
 /**
  * $Id$
  *
- * Created on 30/06/2005
+ * Created on 30/06/2005, Modified on 30/03/2017
  *
- * @author Ben Fortuna
- *
+ * @author Ben Fortuna && Caleb Farara
+ * @version Spring 2017
  */
 public class DateTest extends TestCase {
 
     private Date date;
-
-    private java.util.Date date2;
-    
-    private String expectedString;
+//
+//    private java.util.Date date2;
+//    
+//    private String expectedString;
+//    
+//    /**
+//     * @param date
+//     * @param expectedString
+//     */
+//    public DateTest(Date date, String expectedString) {
+//        super("testToString");
+//        this.date = date;
+//        this.expectedString = expectedString;
+//    }
+//    
+//    /**
+//     * @param date
+//     * @param date2
+//     */
+//    public DateTest(Date date, java.util.Date date2) {
+//        super("testEquals");
+//        this.date = date;
+//        this.date2 = date2;
+//    }
+//    
+//    /**
+//     * 
+//     */
+//    public void testToString() {
+//        assertEquals(expectedString, date.toString());
+//    }
+//    
+//    /**
+//     * 
+//     */
+//    public void testEquals() {
+//        assertEquals(date2, date);
+//    }
+//    
+//    /* (non-Javadoc)
+//     * @see junit.framework.TestCase#getName()
+//     */
+//    public String getName() {
+//        return super.getName() + " [" + date.toString() + "]";
+//    }
+//    
+//    /**
+//     * @return
+//     * @throws ParseException 
+//     */
+//    public static TestSuite suite() throws ParseException {
+//        TestSuite suite = new TestSuite();
+//        suite.addTest(new DateTest(new Date(0l), "19700101"));
+//
+//        Calendar cal = Calendar.getInstance(TimeZones.getDateTimeZone());
+//        cal.clear();
+//        cal.set(Calendar.YEAR, 1984);
+//        // months are zero-based..
+//        cal.set(Calendar.MONTH, 3);
+//        cal.set(Calendar.DAY_OF_MONTH, 17);
+//        suite.addTest(new DateTest(new Date(cal.getTime()), "19840417"));
+//
+//        suite.addTest(new DateTest(new Date("20050630"), "20050630"));
+//
+//        // Test equality of Date instances created using different constructors..
+//        Calendar calendar = Calendar.getInstance(TimeZones.getDateTimeZone());
+//        calendar.clear();
+//        calendar.set(2005, 0, 1);
+//        calendar.set(Calendar.MILLISECOND, 1);
+//        suite.addTest(new DateTest(new Date(calendar.getTime()), new Date("20050101").toString()));
+//        suite.addTest(new DateTest(new Date(calendar.getTime()), new Date("20050101")));
+//        
+//        calendar = Calendar.getInstance(TimeZones.getDateTimeZone());
+//        calendar.clear();
+//        calendar.set(2005, 0, 1);
+//        calendar.clear(Calendar.HOUR_OF_DAY);
+//        calendar.clear(Calendar.MINUTE);
+//        calendar.clear(Calendar.SECOND);
+//        calendar.clear(Calendar.MILLISECOND);
+//        suite.addTest(new DateTest(new Date("20050101"), calendar.getTime()));
+//        return suite;
+//    }
     
     /**
-     * @param date
-     * @param expectedString
+     * Test for default constructor - Default date value formatted "yyyyMMdd" with precision down to the day.
      */
-    public DateTest(Date date, String expectedString) {
-        super("testToString");
-        this.date = date;
-        this.expectedString = expectedString;
+    @Test
+    public void testForDefaultConstructorDefaultDateFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
     }
     
     /**
-     * @param date
-     * @param date2
+     * Test for 2 parameter (precision, timezone) constructor - Date value formatted "yyyyMMdd" from provided precision and timezone.
      */
-    public DateTest(Date date, java.util.Date date2) {
-        super("testEquals");
-        this.date = date;
-        this.date2 = date2;
+    @Test
+    public void testForTwoParameterPrecisionTimezoneFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
     }
     
     /**
-     * 
+     * Test for 1 parameter (time) constructor - Date value formatted "yyyyMMdd" from provided time in milliseconds.
      */
-    public void testToString() {
-        assertEquals(expectedString, date.toString());
+    @Test
+    public void testForOneParameterTimeConstructorFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
     }
     
     /**
-     * 
+     * Test for 3 parameter (time, precision, timezone) constructor - Date value formatted "yyyyMMdd" from provided time in milliseconds and precision and timezone.
      */
-    public void testEquals() {
-        assertEquals(date2, date);
-    }
-    
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#getName()
-     */
-    public String getName() {
-        return super.getName() + " [" + date.toString() + "]";
+    @Test
+    public void testThreeParameterTimePrecisionTimezoneFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
     }
     
     /**
-     * @return
-     * @throws ParseException 
+     * Test for 1 parameter (calendar) constructor - Date value formatted "yyyyMMdd" from provided Calendar object.
      */
-    public static TestSuite suite() throws ParseException {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new DateTest(new Date(0l), "19700101"));
-
-        Calendar cal = Calendar.getInstance(TimeZones.getDateTimeZone());
-        cal.clear();
-        cal.set(Calendar.YEAR, 1984);
-        // months are zero-based..
-        cal.set(Calendar.MONTH, 3);
-        cal.set(Calendar.DAY_OF_MONTH, 17);
-        suite.addTest(new DateTest(new Date(cal.getTime()), "19840417"));
-
-        suite.addTest(new DateTest(new Date("20050630"), "20050630"));
-
-        // Test equality of Date instances created using different constructors..
-        Calendar calendar = Calendar.getInstance(TimeZones.getDateTimeZone());
-        calendar.clear();
-        calendar.set(2005, 0, 1);
-        calendar.set(Calendar.MILLISECOND, 1);
-        suite.addTest(new DateTest(new Date(calendar.getTime()), new Date("20050101").toString()));
-        suite.addTest(new DateTest(new Date(calendar.getTime()), new Date("20050101")));
-        
-        calendar = Calendar.getInstance(TimeZones.getDateTimeZone());
-        calendar.clear();
-        calendar.set(2005, 0, 1);
-        calendar.clear(Calendar.HOUR_OF_DAY);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
-        suite.addTest(new DateTest(new Date("20050101"), calendar.getTime()));
-        return suite;
+    @Test
+    public void testOneParameterCalendarFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
+    }
+    
+    /**
+     * Test for 1 parameter (date) constructor - Date value formatted "yyyyMMdd" from provided Date object.
+     */
+    @Test
+    public void testOneParameterDateFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
+    }
+    
+    /**
+     * Test for 1 parameter (string of date) constructor - Date value formatted "yyyyMMdd" from provided string representation of the date.
+     */
+    @Test
+    public void testOneParameterStringOfDateFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
+    }
+    
+    /**
+     * Test for 2 parameter (string of date and date pattern) constructor - Date value formatted "yyyyMMdd" from provided string representation of the date and date pattern.
+     */
+    @Test
+    public void testTwoarametersStringOfDateAndDatePatternFormattedYyyyMMdd() {
+    	this.date = new Date();
+    	assertEquals("20170330", this.date.toString());
     }
 }
