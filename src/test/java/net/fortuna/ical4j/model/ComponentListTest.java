@@ -12,6 +12,7 @@ import net.fortuna.ical4j.model.component.VEvent;
 /**
  * Unit tests for <code>ComponentList</code> base class.
  * 
+ *
  * @author Caleb Farara
  * @version Spring 2017
  */
