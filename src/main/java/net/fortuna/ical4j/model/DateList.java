@@ -66,6 +66,7 @@ public class DateList implements List<Date>, Serializable {
     	this(false);
     }
 
+	
     public DateList(final boolean unmodifiable) {
     
         this.type = Value.DATE_TIME;
