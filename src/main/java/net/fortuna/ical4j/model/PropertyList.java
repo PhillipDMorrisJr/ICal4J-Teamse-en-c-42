@@ -1,3 +1,5 @@
+
+
 /**
  * Copyright (c) 2012, Ben Fortuna
  * All rights reserved.
@@ -57,7 +59,7 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 
 	/**
 	 * Creates a new instance with the specified initial capacity.
-	 * 
+	 *  
 	 * @param initialCapacity
 	 *            the initial capacity of the list
 	 */
@@ -102,10 +104,9 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 	 *            name of property to return @return a property or null property
 	 *            matching property found @throws PropertyNotFoundException if
 	 *            no properties are found
-	 * @throws PropertyNotFoundException
-	 *             Property is not in PropertyList
+	 * @throws PropertyNotFoundException 
 	 */
-	public final Property getProperty(final String aName) throws PropertyNotFoundException{
+	public final Property getProperty(final String aName) throws PropertyNotFoundException {
 		if (aName == null) {
 			throw new IllegalArgumentException("The name of the property must not be null!");
 		}
@@ -116,12 +117,14 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 				property = currentProperty;
 			}
 		}
-		if (property != null) {
-			return property;
-		} else {
-			throw new PropertyNotFoundException("Property was not found");
+		
+		if (property == null) {
+			throw new PropertyNotFoundException("There are no properties by the name of " + aName);
 		}
+
+		return property;
 	}
+
 
 	/**
 	 * Returns a list of properties with the specified name.
@@ -152,3 +155,4 @@ public class PropertyList extends ArrayList<Property> implements Serializable {
 		return remove((Object) property);
 	}
 }
+
